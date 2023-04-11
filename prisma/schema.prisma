@@ -9,3 +9,37 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Vendor {
+  // pk
+  id                 String     @id @default(cuid())
+  pinCode            String
+  name               String
+  ownerName          String
+  foodType           FoodType[]
+  email              String
+  password           String
+  salt               String
+  phone              String
+  address            String?
+  isServiceAvailable Boolean?   @default(true)
+  coverImages        Image[]
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @default(now())
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  Vendor    Vendor?  @relation(fields: [vendorId], references: [id])
+  vendorId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+enum FoodType {
+  Snacks
+  Desserts
+  Fruits
+  Vegetables
+  Meat
+}
