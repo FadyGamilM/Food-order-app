@@ -1,1 +1,1 @@
-export * from "./vendor/createVendorDto";
+export * from "./admin/createVendorDto";

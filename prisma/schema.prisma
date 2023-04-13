@@ -17,8 +17,8 @@ model Vendor {
   pinCode            String
   brandName          String
   ownerName          String
-  foodType           FoodType[] 
-  email              String
+  foodType           FoodType[]
+  email              String     @unique
   password           String
   salt               String
   phone              String

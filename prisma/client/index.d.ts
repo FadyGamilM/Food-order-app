@@ -2993,6 +2993,7 @@ export namespace Prisma {
 
   export type VendorWhereUniqueInput = {
     id?: number
+    email?: string
   }
 
   export type VendorOrderByWithAggregationInput = {

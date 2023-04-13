@@ -1,9 +1,8 @@
 import { exit } from "process";
-import { PrismaClient } from "../../prisma/client";
+import { db } from "./prisma.service";
 import { createVendorDto } from "../dtos";
 import { Log } from "../utility/ConsoleLogger";
 import { EncryptPassword, generateSlat } from "../utility/PasswordEncryption";
-const db = new PrismaClient();
 
 //! => create new vendor
 export const createVendor = async (vendorDto: createVendorDto) =>
