@@ -8,4 +8,5 @@ export const generateSlat = async () =>
 export const EncryptPassword = async (password: string, salt: string) =>
 {
    let encryptedPass: string = await bcrypt.hash(password, salt);
+   return encryptedPass;
 };

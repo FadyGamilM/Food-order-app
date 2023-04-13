@@ -1,10 +1,10 @@
 import express, { NextFunction, Router, Request, Response } from "express";
-import { createVendor } from "../controllers";
+import { createVendorController } from "../controllers";
 
 // instantiate the router instance
 const router: Router = Router();
 
-router.post("/vendors/new", createVendor);
+router.post("/vendors/new", createVendorController);
 
 
 router.get("/", (req: Request, res: Response, next: NextFunction) =>
