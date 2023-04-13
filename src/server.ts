@@ -23,6 +23,7 @@ const PORT: Number = 5555;
 
 server.listen(PORT, () =>
 {
+   console.clear();
    Log(`Server is up and running on PORT ${PORT}`);
 });
 

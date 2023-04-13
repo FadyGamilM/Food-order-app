@@ -1,6 +1,7 @@
 import { loginDto } from "../dtos/vendor/loginDto";
+import { vendorSignaturePayloadDto } from "../dtos/vendor/vendorSignaturePayloadDto";
 import { Log } from "../utility/ConsoleLogger";
-import { ValidateLoginPassword } from "../utility/PasswordEncryption";
+import { GenerateSignature, ValidateLoginPassword } from "../utility/PasswordEncryption";
 import { db } from "./prisma.service";
 
 export const Login = async (loginRequest: loginDto) =>
@@ -15,8 +16,18 @@ export const Login = async (loginRequest: loginDto) =>
       // check if the credentials are valid
       let isValidCredentials: boolean = await ValidateLoginPassword(loginRequest.password, existingVendor.password, existingVendor.salt);
 
+      // get a signature for this user for later use in other endpoints actions
+      const payload: vendorSignaturePayloadDto = {
+         id: existingVendor.id,
+         brandName: existingVendor.brandName,
+         email: existingVendor.email,
+         ownerName: existingVendor.ownerName,
+         foodType: existingVendor.foodType
+      };
+      const signature: string = await GenerateSignature(existingVendor);
+
       // return the result to the controller
-      return isValidCredentials === true ? existingVendor : null;
+      return isValidCredentials === true ? signature : null;
    }
    catch (err: any) {
       Log(err.message);
