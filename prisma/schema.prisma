@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./client"
 }
 
 datasource db {
@@ -12,11 +13,11 @@ datasource db {
 
 model Vendor {
   // pk
-  id                 String     @id @default(cuid())
+  id                 Int        @id @default(autoincrement())
   pinCode            String
-  name               String
+  brandName          String
   ownerName          String
-  foodType           FoodType[]
+  foodType           FoodType[] 
   email              String
   password           String
   salt               String
@@ -25,21 +26,21 @@ model Vendor {
   isServiceAvailable Boolean?   @default(true)
   coverImages        Image[]
   createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 }
 
 model Image {
-  id        String   @id @default(cuid())
-  Vendor    Vendor?  @relation(fields: [vendorId], references: [id])
-  vendorId  String?
+  id        Int      @id @default(autoincrement())
+  Vendor    Vendor   @relation(fields: [vendorId], references: [id])
+  vendorId  Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum FoodType {
-  Snacks
-  Desserts
-  Fruits
-  Vegetables
-  Meat
+  SNACKS
+  DESSERTS
+  FRUITS
+  VEGETABLES
+  MEAT
 }
