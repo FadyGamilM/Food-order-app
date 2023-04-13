@@ -1,11 +1,12 @@
 import express, { NextFunction, Router, Request, Response } from "express";
-import { createVendorController } from "../controllers";
+import { createVendorController, getVendorByIdController, getVendorsController } from "../controllers";
 
 // instantiate the router instance
 const router: Router = Router();
 
+router.get("/vendors/list", getVendorsController);
 router.post("/vendors/new", createVendorController);
-
+router.get("/vendors/:id", getVendorByIdController);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) =>
 {

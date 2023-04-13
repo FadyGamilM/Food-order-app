@@ -1,1 +1,1 @@
-export * from "./vendor.service";
+export * from "./admin.service";
