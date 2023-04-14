@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { loginDto } from "../dtos/vendor/loginDto";
-import { Login, GetVendorById, UpdateVendorProfile, UpdateVendorServiceAvailability, AddNewMeal } from "../services/vendor.service";
+import { Login, GetVendorById, UpdateVendorProfile, UpdateVendorServiceAvailability, AddNewMeal, GetAllMeals } from "../services/vendor.service";
 import { getVendorDto } from "../dtos/vendor/getVendorDto";
 import { updateVendorProfile } from "../dtos";
 import { Log } from "../utility/ConsoleLogger";
@@ -116,4 +116,17 @@ export const addNewMealController = async (req: Request, res: Response, next: Ne
    else return res.status(201).json({ "data": addedMeal });
 };
 
-export const getAllMealsController = async (req: Request, res: Response, next: NextFunction) => { };
+export const getAllMealsController = async (req: Request, res: Response, next: NextFunction) =>
+{
+   //* extract the payload from the request after authorization middleware
+   const authorizedVendorPayload = req.user;
+
+   //* check if authorized 
+   if (authorizedVendorPayload === undefined) return res.status(403).json({ "data": "user is not authorized" });
+
+   //* call the business logic service to get all meals created by this vendor 
+   let meals = await GetAllMeals(authorizedVendorPayload.id);
+
+   //* return the response 
+   return res.status(200).json({ "data": meals });
+};

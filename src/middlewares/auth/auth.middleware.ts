@@ -24,8 +24,8 @@ export const Authorize = async (req: Request, res: Response, next: NextFunction)
       next();
    } else {
       //* notify the client app that this user is not authorized
-      return res.status(403).json({
-         "error": "user is not authorized"
+      return res.status(401).json({
+         "error": "user is not authenticated !"
       });
    }
 

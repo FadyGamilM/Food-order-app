@@ -131,16 +131,18 @@ export const AddNewMeal = async (vendorId: number, meal: createMealDto) =>
 
    //* return the created meal
    return createdMeal;
-}
+};
 
 
 
 
 
 
+export const GetAllMeals = async (vendorId: number) =>
+{
+   //* get this vendor from the datbase
+   let existingVendor = await db.vendor.findUnique({ where: { id: vendorId }, include: { meals: true } });
 
-
-
-
-
-
+   //* extract all the meals to be returnred
+   return existingVendor?.meals;
+};

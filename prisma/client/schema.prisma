@@ -37,7 +37,7 @@ model Vendor {
 model Meal {
   id            Int          @id @default(autoincrement())
   mealName      String
-  rating        Int
+  rating        Int?
   timeToBeReady DateTime     @default(now())
   category      FoodCategory
   type          FoodType

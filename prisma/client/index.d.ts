@@ -39,7 +39,7 @@ export type Vendor = {
 export type Meal = {
   id: number
   mealName: string
-  rating: number
+  rating: number | null
   timeToBeReady: Date
   category: FoodCategory
   type: FoodType
@@ -2240,7 +2240,7 @@ export namespace Prisma {
   export type MealGroupByOutputType = {
     id: number
     mealName: string
-    rating: number
+    rating: number | null
     timeToBeReady: Date
     category: FoodCategory
     type: FoodType
@@ -5167,7 +5167,7 @@ export namespace Prisma {
     NOT?: Enumerable<MealWhereInput>
     id?: IntFilter | number
     mealName?: StringFilter | string
-    rating?: IntFilter | number
+    rating?: IntNullableFilter | number | null
     timeToBeReady?: DateTimeFilter | Date | string
     category?: EnumFoodCategoryFilter | FoodCategory
     type?: EnumFoodTypeFilter | FoodType
@@ -5213,7 +5213,7 @@ export namespace Prisma {
     NOT?: Enumerable<MealScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
     mealName?: StringWithAggregatesFilter | string
-    rating?: IntWithAggregatesFilter | number
+    rating?: IntNullableWithAggregatesFilter | number | null
     timeToBeReady?: DateTimeWithAggregatesFilter | Date | string
     category?: EnumFoodCategoryWithAggregatesFilter | FoodCategory
     type?: EnumFoodTypeWithAggregatesFilter | FoodType
@@ -5425,7 +5425,7 @@ export namespace Prisma {
 
   export type MealCreateInput = {
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -5436,7 +5436,7 @@ export namespace Prisma {
   export type MealUncheckedCreateInput = {
     id?: number
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -5446,7 +5446,7 @@ export namespace Prisma {
 
   export type MealUpdateInput = {
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -5457,7 +5457,7 @@ export namespace Prisma {
   export type MealUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -5468,7 +5468,7 @@ export namespace Prisma {
   export type MealCreateManyInput = {
     id?: number
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -5477,7 +5477,7 @@ export namespace Prisma {
 
   export type MealUpdateManyMutationInput = {
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -5486,7 +5486,7 @@ export namespace Prisma {
   export type MealUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -5789,6 +5789,17 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter
   }
 
+  export type IntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
+  }
+
   export type EnumFoodCategoryFilter = {
     equals?: FoodCategory
     in?: Enumerable<FoodCategory>
@@ -5858,6 +5869,22 @@ export namespace Prisma {
     id?: SortOrder
     rating?: SortOrder
     vendorId?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
   }
 
   export type EnumFoodCategoryWithAggregatesFilter = {
@@ -6110,6 +6137,14 @@ export namespace Prisma {
     connect?: Enumerable<MealImageWhereUniqueInput>
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumFoodCategoryFieldUpdateOperationsInput = {
     set?: FoodCategory
   }
@@ -6353,6 +6388,33 @@ export namespace Prisma {
     not?: NestedEnumFoodTypeFilter | FoodType
   }
 
+  export type NestedIntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
+  }
+
+  export type NestedFloatNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatNullableFilter | number | null
+  }
+
   export type NestedEnumFoodCategoryWithAggregatesFilter = {
     equals?: FoodCategory
     in?: Enumerable<FoodCategory>
@@ -6412,7 +6474,7 @@ export namespace Prisma {
 
   export type MealCreateWithoutVendorInput = {
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -6422,7 +6484,7 @@ export namespace Prisma {
   export type MealUncheckedCreateWithoutVendorInput = {
     id?: number
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -6487,7 +6549,7 @@ export namespace Prisma {
     NOT?: Enumerable<MealScalarWhereInput>
     id?: IntFilter | number
     mealName?: StringFilter | string
-    rating?: IntFilter | number
+    rating?: IntNullableFilter | number | null
     timeToBeReady?: DateTimeFilter | Date | string
     category?: EnumFoodCategoryFilter | FoodCategory
     type?: EnumFoodTypeFilter | FoodType
@@ -6692,7 +6754,7 @@ export namespace Prisma {
 
   export type MealCreateWithoutImagesInput = {
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -6702,7 +6764,7 @@ export namespace Prisma {
   export type MealUncheckedCreateWithoutImagesInput = {
     id?: number
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -6721,7 +6783,7 @@ export namespace Prisma {
 
   export type MealUpdateWithoutImagesInput = {
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -6731,7 +6793,7 @@ export namespace Prisma {
   export type MealUncheckedUpdateWithoutImagesInput = {
     id?: IntFieldUpdateOperationsInput | number
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -6747,7 +6809,7 @@ export namespace Prisma {
   export type MealCreateManyVendorInput = {
     id?: number
     mealName: string
-    rating: number
+    rating?: number | null
     timeToBeReady?: Date | string
     category: FoodCategory
     type: FoodType
@@ -6772,7 +6834,7 @@ export namespace Prisma {
 
   export type MealUpdateWithoutVendorInput = {
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -6782,7 +6844,7 @@ export namespace Prisma {
   export type MealUncheckedUpdateWithoutVendorInput = {
     id?: IntFieldUpdateOperationsInput | number
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
@@ -6792,7 +6854,7 @@ export namespace Prisma {
   export type MealUncheckedUpdateManyWithoutMealsInput = {
     id?: IntFieldUpdateOperationsInput | number
     mealName?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
     timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
     type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
