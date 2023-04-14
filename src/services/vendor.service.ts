@@ -24,7 +24,7 @@ export const Login = async (loginRequest: loginDto) =>
          ownerName: existingVendor.ownerName,
          foodType: existingVendor.foodType
       };
-      const signature: string = await GenerateSignature(existingVendor);
+      const signature: string = await GenerateSignature(payload);
 
       // return the result to the controller
       return isValidCredentials === true ? signature : null;
