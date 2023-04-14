@@ -1,3 +1,6 @@
+import { updateVendorProfile } from "../dtos";
+import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
+import { getVendorDto } from "../dtos/vendor/getVendorDto";
 import { loginDto } from "../dtos/vendor/loginDto";
 import { vendorSignaturePayloadDto } from "../dtos/vendor/vendorSignaturePayloadDto";
 import { Log } from "../utility/ConsoleLogger";
@@ -48,3 +51,47 @@ export const GetVendorById = async (vendorId: number) =>
    // return the result
    return existingVendor;
 };
+
+export const UpdateVendorProfile = async (updatedProfile: updateVendorProfile, authorizedVendorId: number) =>
+{
+
+   const oldVendor = await db.vendor.findUnique({ where: { id: authorizedVendorId } });
+   if (oldVendor === null) return null;
+
+   // update the vendor
+   const updated = await db.vendor.update({
+      where: {
+         id: authorizedVendorId
+      },
+      data: {
+         address: (updatedProfile.address !== undefined && updatedProfile.address !== null) ? updatedProfile.address : oldVendor.address,
+         brandName: (updatedProfile.brandName !== undefined && updatedProfile.brandName !== null) ? updatedProfile.brandName : oldVendor.brandName,
+         ownerName: (updatedProfile.ownerName !== undefined && updatedProfile.ownerName !== null) ? updatedProfile.ownerName : oldVendor.ownerName,
+         // foodType: (updatedProfile.foodType !== undefined && updatedProfile.foodType !== null) ? oldVendor.foodType.push(updatedProfile.foodType) : oldVendor.foodType,
+         phone: (updatedProfile.phone !== undefined && updatedProfile.phone !== null) ? updatedProfile.phone : oldVendor.phone,
+         isServiceAvailable: (updatedProfile.isServiceAvailable !== undefined && updatedProfile.isServiceAvailable !== null) ? updatedProfile.isServiceAvailable : oldVendor.isServiceAvailable,
+      }
+   });
+
+   return updated;
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

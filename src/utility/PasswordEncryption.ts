@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { Request, Response } from "express";
 import { Authorize } from "../middlewares";
 import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
+import { Log } from "./ConsoleLogger";
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ export const ValidateSignature = async (req: Request): Promise<boolean> =>
 
       //* now assign the user to the request to be accessed in the next requests handlers
       req.user = authorizedUserPayload;
+
 
       //* and return the response to the handler
       return true;
