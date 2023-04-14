@@ -79,7 +79,19 @@ export const UpdateVendorProfile = async (updatedProfile: updateVendorProfile, a
 
 
 
-
+export const UpdateVendorServiceAvailability = async (authorizedVendorId: number) =>
+{
+   const existingVendor = await db.vendor.findUnique({ where: { id: authorizedVendorId } });
+   if (!existingVendor) return null;
+   return await db.vendor.update({
+      where: {
+         id: existingVendor.id
+      },
+      data: {
+         isServiceAvailable: !existingVendor.isServiceAvailable
+      }
+   });
+}
 
 
 
