@@ -89,11 +89,20 @@ Prisma.NullTypes = {
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 function makeEnum(x) { return x; }
 
-exports.Prisma.ImageScalarFieldEnum = makeEnum({
+exports.Prisma.MealImageScalarFieldEnum = makeEnum({
   id: 'id',
-  vendorId: 'vendorId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  price: 'price',
+  mealId: 'mealId'
+});
+
+exports.Prisma.MealScalarFieldEnum = makeEnum({
+  id: 'id',
+  mealName: 'mealName',
+  rating: 'rating',
+  timeToBeReady: 'timeToBeReady',
+  category: 'category',
+  type: 'type',
+  vendorId: 'vendorId'
 });
 
 exports.Prisma.QueryMode = makeEnum({
@@ -113,6 +122,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.VendorImageScalarFieldEnum = makeEnum({
+  id: 'id',
+  vendorId: 'vendorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+});
+
 exports.Prisma.VendorScalarFieldEnum = makeEnum({
   id: 'id',
   pinCode: 'pinCode',
@@ -128,17 +144,22 @@ exports.Prisma.VendorScalarFieldEnum = makeEnum({
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 });
+exports.FoodCategory = makeEnum({
+  BREAKFAST: 'BREAKFAST',
+  LAUNCH: 'LAUNCH',
+  DINNER: 'DINNER'
+});
+
 exports.FoodType = makeEnum({
-  SNACKS: 'SNACKS',
-  DESSERTS: 'DESSERTS',
-  FRUITS: 'FRUITS',
-  VEGETABLES: 'VEGETABLES',
-  MEAT: 'MEAT'
+  VEG: 'VEG',
+  NON_VEG: 'NON_VEG'
 });
 
 exports.Prisma.ModelName = makeEnum({
   Vendor: 'Vendor',
-  Image: 'Image'
+  Meal: 'Meal',
+  VendorImage: 'VendorImage',
+  MealImage: 'MealImage'
 });
 
 /**

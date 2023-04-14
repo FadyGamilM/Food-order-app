@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { LoginController, UpdateVendorProfileController, getVendorProfile, updateVendorServicesController } from "../controllers";
+import { LoginController, UpdateVendorProfileController, getVendorProfile, updateVendorServicesController, addNewMealController, getAllMealsController } from "../controllers";
 import { Authorize } from "../middlewares";
 
 const router: Router = Router();
@@ -15,6 +15,12 @@ router.patch("/profile", Authorize, UpdateVendorProfileController);
 
 //* update vendor's provided services
 router.patch("/services", Authorize, updateVendorServicesController);
+
+//* vendor can list all his/her provided  meals
+router.post("/meals", Authorize, addNewMealController);
+
+//* vendor can add a new meal to be served for clients
+router.get("/meals", Authorize, getAllMealsController);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) =>
 {

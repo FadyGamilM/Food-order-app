@@ -1,11 +1,16 @@
 import { updateVendorProfile } from "../dtos";
 import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
 import { getVendorDto } from "../dtos/vendor/getVendorDto";
+import { createMealDto } from "../dtos/";
 import { loginDto } from "../dtos/vendor/loginDto";
 import { vendorSignaturePayloadDto } from "../dtos/vendor/vendorSignaturePayloadDto";
 import { Log } from "../utility/ConsoleLogger";
 import { GenerateSignature, ValidateLoginPassword } from "../utility/PasswordEncryption";
 import { db } from "./prisma.service";
+import { getMealDto } from "../dtos/vendor/getMealDto";
+import { FoodCategory } from "../../prisma/client";
+import { FoodType, Meal } from "../../prisma/client";
+import { add } from "date-fns";
 
 export const Login = async (loginRequest: loginDto) =>
 {
@@ -92,10 +97,41 @@ export const UpdateVendorServiceAvailability = async (authorizedVendorId: number
          isServiceAvailable: !existingVendor.isServiceAvailable
       }
    });
+};
+
+
+export const AddNewMeal = async (vendorId: number, meal: createMealDto) =>
+{
+   //* get the vendor from db
+   let existingVendor = await db.vendor.findUnique({
+      where: {
+         id: vendorId
+      },
+      include: {
+         meals: true
+      }
+   });
+
+   //* validate that this vendor exists
+   if (existingVendor === null) return null;
+
+
+   //* add this meal into the vendor instance 
+   let createdMeal = await db.meal.create({
+      data: {
+         vendorId: existingVendor.id,
+         category: meal.category as keyof typeof FoodCategory,
+         mealName: meal.mealName,
+         type: meal.type as keyof typeof FoodType,
+         timeToBeReady: add(new Date(), { "hours": 2 }),
+         rating: 0.0
+      }
+   });
+   existingVendor.meals.push(createdMeal);
+
+   //* return the created meal
+   return createdMeal;
 }
-
-
-
 
 
 

@@ -33,14 +33,38 @@ export type Vendor = {
 }
 
 /**
- * Model Image
+ * Model Meal
  * 
  */
-export type Image = {
+export type Meal = {
+  id: number
+  mealName: string
+  rating: number
+  timeToBeReady: Date
+  category: FoodCategory
+  type: FoodType
+  vendorId: number
+}
+
+/**
+ * Model VendorImage
+ * 
+ */
+export type VendorImage = {
   id: number
   vendorId: number
   createdAt: Date
   updatedAt: Date
+}
+
+/**
+ * Model MealImage
+ * 
+ */
+export type MealImage = {
+  id: number
+  price: number
+  mealId: number
 }
 
 
@@ -51,12 +75,18 @@ export type Image = {
 // Based on
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 
+export const FoodCategory: {
+  BREAKFAST: 'BREAKFAST',
+  LAUNCH: 'LAUNCH',
+  DINNER: 'DINNER'
+};
+
+export type FoodCategory = (typeof FoodCategory)[keyof typeof FoodCategory]
+
+
 export const FoodType: {
-  SNACKS: 'SNACKS',
-  DESSERTS: 'DESSERTS',
-  FRUITS: 'FRUITS',
-  VEGETABLES: 'VEGETABLES',
-  MEAT: 'MEAT'
+  VEG: 'VEG',
+  NON_VEG: 'NON_VEG'
 };
 
 export type FoodType = (typeof FoodType)[keyof typeof FoodType]
@@ -190,14 +220,34 @@ export class PrismaClient<
   get vendor(): Prisma.VendorDelegate<GlobalReject>;
 
   /**
-   * `prisma.image`: Exposes CRUD operations for the **Image** model.
+   * `prisma.meal`: Exposes CRUD operations for the **Meal** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Images
-    * const images = await prisma.image.findMany()
+    * // Fetch zero or more Meals
+    * const meals = await prisma.meal.findMany()
     * ```
     */
-  get image(): Prisma.ImageDelegate<GlobalReject>;
+  get meal(): Prisma.MealDelegate<GlobalReject>;
+
+  /**
+   * `prisma.vendorImage`: Exposes CRUD operations for the **VendorImage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VendorImages
+    * const vendorImages = await prisma.vendorImage.findMany()
+    * ```
+    */
+  get vendorImage(): Prisma.VendorImageDelegate<GlobalReject>;
+
+  /**
+   * `prisma.mealImage`: Exposes CRUD operations for the **MealImage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MealImages
+    * const mealImages = await prisma.mealImage.findMany()
+    * ```
+    */
+  get mealImage(): Prisma.MealImageDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -668,7 +718,9 @@ export namespace Prisma {
 
   export const ModelName: {
     Vendor: 'Vendor',
-    Image: 'Image'
+    Meal: 'Meal',
+    VendorImage: 'VendorImage',
+    MealImage: 'MealImage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -836,10 +888,12 @@ export namespace Prisma {
 
   export type VendorCountOutputType = {
     coverImages: number
+    meals: number
   }
 
   export type VendorCountOutputTypeSelect = {
     coverImages?: boolean
+    meals?: boolean
   }
 
   export type VendorCountOutputTypeGetPayload<S extends boolean | null | undefined | VendorCountOutputTypeArgs> =
@@ -868,6 +922,49 @@ export namespace Prisma {
      * Select specific fields to fetch from the VendorCountOutputType
      */
     select?: VendorCountOutputTypeSelect | null
+  }
+
+
+
+  /**
+   * Count Type MealCountOutputType
+   */
+
+
+  export type MealCountOutputType = {
+    images: number
+  }
+
+  export type MealCountOutputTypeSelect = {
+    images?: boolean
+  }
+
+  export type MealCountOutputTypeGetPayload<S extends boolean | null | undefined | MealCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? MealCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (MealCountOutputTypeArgs)
+    ? MealCountOutputType 
+    : S extends { select: any } & (MealCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof MealCountOutputType ? MealCountOutputType[P] : never
+  } 
+      : MealCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * MealCountOutputType without action
+   */
+  export type MealCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the MealCountOutputType
+     */
+    select?: MealCountOutputTypeSelect | null
   }
 
 
@@ -1137,12 +1234,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     coverImages?: boolean | Vendor$coverImagesArgs
+    meals?: boolean | Vendor$mealsArgs
     _count?: boolean | VendorCountOutputTypeArgs
   }
 
 
   export type VendorInclude = {
     coverImages?: boolean | Vendor$coverImagesArgs
+    meals?: boolean | Vendor$mealsArgs
     _count?: boolean | VendorCountOutputTypeArgs
   }
 
@@ -1153,13 +1252,15 @@ export namespace Prisma {
     S extends { include: any } & (VendorArgs | VendorFindManyArgs)
     ? Vendor  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'coverImages' ? Array < ImageGetPayload<S['include'][P]>>  :
+        P extends 'coverImages' ? Array < VendorImageGetPayload<S['include'][P]>>  :
+        P extends 'meals' ? Array < MealGetPayload<S['include'][P]>>  :
         P extends '_count' ? VendorCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (VendorArgs | VendorFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'coverImages' ? Array < ImageGetPayload<S['select'][P]>>  :
+        P extends 'coverImages' ? Array < VendorImageGetPayload<S['select'][P]>>  :
+        P extends 'meals' ? Array < MealGetPayload<S['select'][P]>>  :
         P extends '_count' ? VendorCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Vendor ? Vendor[P] : never
   } 
       : Vendor
@@ -1532,7 +1633,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    coverImages<T extends Vendor$coverImagesArgs= {}>(args?: Subset<T, Vendor$coverImagesArgs>): Prisma.PrismaPromise<Array<ImageGetPayload<T>>| Null>;
+    coverImages<T extends Vendor$coverImagesArgs= {}>(args?: Subset<T, Vendor$coverImagesArgs>): Prisma.PrismaPromise<Array<VendorImageGetPayload<T>>| Null>;
+
+    meals<T extends Vendor$mealsArgs= {}>(args?: Subset<T, Vendor$mealsArgs>): Prisma.PrismaPromise<Array<MealGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -1894,19 +1997,40 @@ export namespace Prisma {
    */
   export type Vendor$coverImagesArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
-    where?: ImageWhereInput
-    orderBy?: Enumerable<ImageOrderByWithRelationInput>
-    cursor?: ImageWhereUniqueInput
+    include?: VendorImageInclude | null
+    where?: VendorImageWhereInput
+    orderBy?: Enumerable<VendorImageOrderByWithRelationInput>
+    cursor?: VendorImageWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<ImageScalarFieldEnum>
+    distinct?: Enumerable<VendorImageScalarFieldEnum>
+  }
+
+
+  /**
+   * Vendor.meals
+   */
+  export type Vendor$mealsArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    where?: MealWhereInput
+    orderBy?: Enumerable<MealOrderByWithRelationInput>
+    cursor?: MealWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<MealScalarFieldEnum>
   }
 
 
@@ -1927,373 +2051,409 @@ export namespace Prisma {
 
 
   /**
-   * Model Image
+   * Model Meal
    */
 
 
-  export type AggregateImage = {
-    _count: ImageCountAggregateOutputType | null
-    _avg: ImageAvgAggregateOutputType | null
-    _sum: ImageSumAggregateOutputType | null
-    _min: ImageMinAggregateOutputType | null
-    _max: ImageMaxAggregateOutputType | null
+  export type AggregateMeal = {
+    _count: MealCountAggregateOutputType | null
+    _avg: MealAvgAggregateOutputType | null
+    _sum: MealSumAggregateOutputType | null
+    _min: MealMinAggregateOutputType | null
+    _max: MealMaxAggregateOutputType | null
   }
 
-  export type ImageAvgAggregateOutputType = {
+  export type MealAvgAggregateOutputType = {
     id: number | null
+    rating: number | null
     vendorId: number | null
   }
 
-  export type ImageSumAggregateOutputType = {
+  export type MealSumAggregateOutputType = {
     id: number | null
+    rating: number | null
     vendorId: number | null
   }
 
-  export type ImageMinAggregateOutputType = {
+  export type MealMinAggregateOutputType = {
     id: number | null
+    mealName: string | null
+    rating: number | null
+    timeToBeReady: Date | null
+    category: FoodCategory | null
+    type: FoodType | null
     vendorId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
-  export type ImageMaxAggregateOutputType = {
+  export type MealMaxAggregateOutputType = {
     id: number | null
+    mealName: string | null
+    rating: number | null
+    timeToBeReady: Date | null
+    category: FoodCategory | null
+    type: FoodType | null
     vendorId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
-  export type ImageCountAggregateOutputType = {
+  export type MealCountAggregateOutputType = {
     id: number
+    mealName: number
+    rating: number
+    timeToBeReady: number
+    category: number
+    type: number
     vendorId: number
-    createdAt: number
-    updatedAt: number
     _all: number
   }
 
 
-  export type ImageAvgAggregateInputType = {
+  export type MealAvgAggregateInputType = {
     id?: true
+    rating?: true
     vendorId?: true
   }
 
-  export type ImageSumAggregateInputType = {
+  export type MealSumAggregateInputType = {
     id?: true
+    rating?: true
     vendorId?: true
   }
 
-  export type ImageMinAggregateInputType = {
+  export type MealMinAggregateInputType = {
     id?: true
+    mealName?: true
+    rating?: true
+    timeToBeReady?: true
+    category?: true
+    type?: true
     vendorId?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
-  export type ImageMaxAggregateInputType = {
+  export type MealMaxAggregateInputType = {
     id?: true
+    mealName?: true
+    rating?: true
+    timeToBeReady?: true
+    category?: true
+    type?: true
     vendorId?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
-  export type ImageCountAggregateInputType = {
+  export type MealCountAggregateInputType = {
     id?: true
+    mealName?: true
+    rating?: true
+    timeToBeReady?: true
+    category?: true
+    type?: true
     vendorId?: true
-    createdAt?: true
-    updatedAt?: true
     _all?: true
   }
 
-  export type ImageAggregateArgs = {
+  export type MealAggregateArgs = {
     /**
-     * Filter which Image to aggregate.
+     * Filter which Meal to aggregate.
      */
-    where?: ImageWhereInput
+    where?: MealWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of Meals to fetch.
      */
-    orderBy?: Enumerable<ImageOrderByWithRelationInput>
+    orderBy?: Enumerable<MealOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ImageWhereUniqueInput
+    cursor?: MealWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` Meals from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` Meals.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Images
+     * Count returned Meals
     **/
-    _count?: true | ImageCountAggregateInputType
+    _count?: true | MealCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ImageAvgAggregateInputType
+    _avg?: MealAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ImageSumAggregateInputType
+    _sum?: MealSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ImageMinAggregateInputType
+    _min?: MealMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ImageMaxAggregateInputType
+    _max?: MealMaxAggregateInputType
   }
 
-  export type GetImageAggregateType<T extends ImageAggregateArgs> = {
-        [P in keyof T & keyof AggregateImage]: P extends '_count' | 'count'
+  export type GetMealAggregateType<T extends MealAggregateArgs> = {
+        [P in keyof T & keyof AggregateMeal]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateImage[P]>
-      : GetScalarType<T[P], AggregateImage[P]>
+        : GetScalarType<T[P], AggregateMeal[P]>
+      : GetScalarType<T[P], AggregateMeal[P]>
   }
 
 
 
 
-  export type ImageGroupByArgs = {
-    where?: ImageWhereInput
-    orderBy?: Enumerable<ImageOrderByWithAggregationInput>
-    by: ImageScalarFieldEnum[]
-    having?: ImageScalarWhereWithAggregatesInput
+  export type MealGroupByArgs = {
+    where?: MealWhereInput
+    orderBy?: Enumerable<MealOrderByWithAggregationInput>
+    by: MealScalarFieldEnum[]
+    having?: MealScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ImageCountAggregateInputType | true
-    _avg?: ImageAvgAggregateInputType
-    _sum?: ImageSumAggregateInputType
-    _min?: ImageMinAggregateInputType
-    _max?: ImageMaxAggregateInputType
+    _count?: MealCountAggregateInputType | true
+    _avg?: MealAvgAggregateInputType
+    _sum?: MealSumAggregateInputType
+    _min?: MealMinAggregateInputType
+    _max?: MealMaxAggregateInputType
   }
 
 
-  export type ImageGroupByOutputType = {
+  export type MealGroupByOutputType = {
     id: number
+    mealName: string
+    rating: number
+    timeToBeReady: Date
+    category: FoodCategory
+    type: FoodType
     vendorId: number
-    createdAt: Date
-    updatedAt: Date
-    _count: ImageCountAggregateOutputType | null
-    _avg: ImageAvgAggregateOutputType | null
-    _sum: ImageSumAggregateOutputType | null
-    _min: ImageMinAggregateOutputType | null
-    _max: ImageMaxAggregateOutputType | null
+    _count: MealCountAggregateOutputType | null
+    _avg: MealAvgAggregateOutputType | null
+    _sum: MealSumAggregateOutputType | null
+    _min: MealMinAggregateOutputType | null
+    _max: MealMaxAggregateOutputType | null
   }
 
-  type GetImageGroupByPayload<T extends ImageGroupByArgs> = Prisma.PrismaPromise<
+  type GetMealGroupByPayload<T extends MealGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<ImageGroupByOutputType, T['by']> &
+      PickArray<MealGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ImageGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof MealGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ImageGroupByOutputType[P]>
-            : GetScalarType<T[P], ImageGroupByOutputType[P]>
+              : GetScalarType<T[P], MealGroupByOutputType[P]>
+            : GetScalarType<T[P], MealGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ImageSelect = {
+  export type MealSelect = {
     id?: boolean
+    mealName?: boolean
+    rating?: boolean
+    timeToBeReady?: boolean
+    category?: boolean
+    type?: boolean
     vendorId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    Vendor?: boolean | VendorArgs
+    images?: boolean | Meal$imagesArgs
+    vendor?: boolean | VendorArgs
+    _count?: boolean | MealCountOutputTypeArgs
   }
 
 
-  export type ImageInclude = {
-    Vendor?: boolean | VendorArgs
+  export type MealInclude = {
+    images?: boolean | Meal$imagesArgs
+    vendor?: boolean | VendorArgs
+    _count?: boolean | MealCountOutputTypeArgs
   }
 
-  export type ImageGetPayload<S extends boolean | null | undefined | ImageArgs> =
+  export type MealGetPayload<S extends boolean | null | undefined | MealArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Image :
+    S extends true ? Meal :
     S extends undefined ? never :
-    S extends { include: any } & (ImageArgs | ImageFindManyArgs)
-    ? Image  & {
+    S extends { include: any } & (MealArgs | MealFindManyArgs)
+    ? Meal  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'Vendor' ? VendorGetPayload<S['include'][P]> :  never
+        P extends 'images' ? Array < MealImageGetPayload<S['include'][P]>>  :
+        P extends 'vendor' ? VendorGetPayload<S['include'][P]> :
+        P extends '_count' ? MealCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
-    : S extends { select: any } & (ImageArgs | ImageFindManyArgs)
+    : S extends { select: any } & (MealArgs | MealFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'Vendor' ? VendorGetPayload<S['select'][P]> :  P extends keyof Image ? Image[P] : never
+        P extends 'images' ? Array < MealImageGetPayload<S['select'][P]>>  :
+        P extends 'vendor' ? VendorGetPayload<S['select'][P]> :
+        P extends '_count' ? MealCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Meal ? Meal[P] : never
   } 
-      : Image
+      : Meal
 
 
-  type ImageCountArgs = 
-    Omit<ImageFindManyArgs, 'select' | 'include'> & {
-      select?: ImageCountAggregateInputType | true
+  type MealCountArgs = 
+    Omit<MealFindManyArgs, 'select' | 'include'> & {
+      select?: MealCountAggregateInputType | true
     }
 
-  export interface ImageDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface MealDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
 
     /**
-     * Find zero or one Image that matches the filter.
-     * @param {ImageFindUniqueArgs} args - Arguments to find a Image
+     * Find zero or one Meal that matches the filter.
+     * @param {MealFindUniqueArgs} args - Arguments to find a Meal
      * @example
-     * // Get one Image
-     * const image = await prisma.image.findUnique({
+     * // Get one Meal
+     * const meal = await prisma.meal.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends ImageFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, ImageFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Image'> extends True ? Prisma__ImageClient<ImageGetPayload<T>> : Prisma__ImageClient<ImageGetPayload<T> | null, null>
+    findUnique<T extends MealFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, MealFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Meal'> extends True ? Prisma__MealClient<MealGetPayload<T>> : Prisma__MealClient<MealGetPayload<T> | null, null>
 
     /**
-     * Find one Image that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one Meal that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {ImageFindUniqueOrThrowArgs} args - Arguments to find a Image
+     * @param {MealFindUniqueOrThrowArgs} args - Arguments to find a Meal
      * @example
-     * // Get one Image
-     * const image = await prisma.image.findUniqueOrThrow({
+     * // Get one Meal
+     * const meal = await prisma.meal.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends ImageFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, ImageFindUniqueOrThrowArgs>
-    ): Prisma__ImageClient<ImageGetPayload<T>>
+    findUniqueOrThrow<T extends MealFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, MealFindUniqueOrThrowArgs>
+    ): Prisma__MealClient<MealGetPayload<T>>
 
     /**
-     * Find the first Image that matches the filter.
+     * Find the first Meal that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImageFindFirstArgs} args - Arguments to find a Image
+     * @param {MealFindFirstArgs} args - Arguments to find a Meal
      * @example
-     * // Get one Image
-     * const image = await prisma.image.findFirst({
+     * // Get one Meal
+     * const meal = await prisma.meal.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends ImageFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, ImageFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Image'> extends True ? Prisma__ImageClient<ImageGetPayload<T>> : Prisma__ImageClient<ImageGetPayload<T> | null, null>
+    findFirst<T extends MealFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, MealFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Meal'> extends True ? Prisma__MealClient<MealGetPayload<T>> : Prisma__MealClient<MealGetPayload<T> | null, null>
 
     /**
-     * Find the first Image that matches the filter or
+     * Find the first Meal that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImageFindFirstOrThrowArgs} args - Arguments to find a Image
+     * @param {MealFindFirstOrThrowArgs} args - Arguments to find a Meal
      * @example
-     * // Get one Image
-     * const image = await prisma.image.findFirstOrThrow({
+     * // Get one Meal
+     * const meal = await prisma.meal.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends ImageFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, ImageFindFirstOrThrowArgs>
-    ): Prisma__ImageClient<ImageGetPayload<T>>
+    findFirstOrThrow<T extends MealFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, MealFindFirstOrThrowArgs>
+    ): Prisma__MealClient<MealGetPayload<T>>
 
     /**
-     * Find zero or more Images that matches the filter.
+     * Find zero or more Meals that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImageFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {MealFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Images
-     * const images = await prisma.image.findMany()
+     * // Get all Meals
+     * const meals = await prisma.meal.findMany()
      * 
-     * // Get first 10 Images
-     * const images = await prisma.image.findMany({ take: 10 })
+     * // Get first 10 Meals
+     * const meals = await prisma.meal.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const imageWithIdOnly = await prisma.image.findMany({ select: { id: true } })
+     * const mealWithIdOnly = await prisma.meal.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends ImageFindManyArgs>(
-      args?: SelectSubset<T, ImageFindManyArgs>
-    ): Prisma.PrismaPromise<Array<ImageGetPayload<T>>>
+    findMany<T extends MealFindManyArgs>(
+      args?: SelectSubset<T, MealFindManyArgs>
+    ): Prisma.PrismaPromise<Array<MealGetPayload<T>>>
 
     /**
-     * Create a Image.
-     * @param {ImageCreateArgs} args - Arguments to create a Image.
+     * Create a Meal.
+     * @param {MealCreateArgs} args - Arguments to create a Meal.
      * @example
-     * // Create one Image
-     * const Image = await prisma.image.create({
+     * // Create one Meal
+     * const Meal = await prisma.meal.create({
      *   data: {
-     *     // ... data to create a Image
+     *     // ... data to create a Meal
      *   }
      * })
      * 
     **/
-    create<T extends ImageCreateArgs>(
-      args: SelectSubset<T, ImageCreateArgs>
-    ): Prisma__ImageClient<ImageGetPayload<T>>
+    create<T extends MealCreateArgs>(
+      args: SelectSubset<T, MealCreateArgs>
+    ): Prisma__MealClient<MealGetPayload<T>>
 
     /**
-     * Create many Images.
-     *     @param {ImageCreateManyArgs} args - Arguments to create many Images.
+     * Create many Meals.
+     *     @param {MealCreateManyArgs} args - Arguments to create many Meals.
      *     @example
-     *     // Create many Images
-     *     const image = await prisma.image.createMany({
+     *     // Create many Meals
+     *     const meal = await prisma.meal.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends ImageCreateManyArgs>(
-      args?: SelectSubset<T, ImageCreateManyArgs>
+    createMany<T extends MealCreateManyArgs>(
+      args?: SelectSubset<T, MealCreateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Image.
-     * @param {ImageDeleteArgs} args - Arguments to delete one Image.
+     * Delete a Meal.
+     * @param {MealDeleteArgs} args - Arguments to delete one Meal.
      * @example
-     * // Delete one Image
-     * const Image = await prisma.image.delete({
+     * // Delete one Meal
+     * const Meal = await prisma.meal.delete({
      *   where: {
-     *     // ... filter to delete one Image
+     *     // ... filter to delete one Meal
      *   }
      * })
      * 
     **/
-    delete<T extends ImageDeleteArgs>(
-      args: SelectSubset<T, ImageDeleteArgs>
-    ): Prisma__ImageClient<ImageGetPayload<T>>
+    delete<T extends MealDeleteArgs>(
+      args: SelectSubset<T, MealDeleteArgs>
+    ): Prisma__MealClient<MealGetPayload<T>>
 
     /**
-     * Update one Image.
-     * @param {ImageUpdateArgs} args - Arguments to update one Image.
+     * Update one Meal.
+     * @param {MealUpdateArgs} args - Arguments to update one Meal.
      * @example
-     * // Update one Image
-     * const image = await prisma.image.update({
+     * // Update one Meal
+     * const meal = await prisma.meal.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2303,34 +2463,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends ImageUpdateArgs>(
-      args: SelectSubset<T, ImageUpdateArgs>
-    ): Prisma__ImageClient<ImageGetPayload<T>>
+    update<T extends MealUpdateArgs>(
+      args: SelectSubset<T, MealUpdateArgs>
+    ): Prisma__MealClient<MealGetPayload<T>>
 
     /**
-     * Delete zero or more Images.
-     * @param {ImageDeleteManyArgs} args - Arguments to filter Images to delete.
+     * Delete zero or more Meals.
+     * @param {MealDeleteManyArgs} args - Arguments to filter Meals to delete.
      * @example
-     * // Delete a few Images
-     * const { count } = await prisma.image.deleteMany({
+     * // Delete a few Meals
+     * const { count } = await prisma.meal.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends ImageDeleteManyArgs>(
-      args?: SelectSubset<T, ImageDeleteManyArgs>
+    deleteMany<T extends MealDeleteManyArgs>(
+      args?: SelectSubset<T, MealDeleteManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Images.
+     * Update zero or more Meals.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {MealUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Images
-     * const image = await prisma.image.updateMany({
+     * // Update many Meals
+     * const meal = await prisma.meal.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2340,59 +2500,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends ImageUpdateManyArgs>(
-      args: SelectSubset<T, ImageUpdateManyArgs>
+    updateMany<T extends MealUpdateManyArgs>(
+      args: SelectSubset<T, MealUpdateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Image.
-     * @param {ImageUpsertArgs} args - Arguments to update or create a Image.
+     * Create or update one Meal.
+     * @param {MealUpsertArgs} args - Arguments to update or create a Meal.
      * @example
-     * // Update or create a Image
-     * const image = await prisma.image.upsert({
+     * // Update or create a Meal
+     * const meal = await prisma.meal.upsert({
      *   create: {
-     *     // ... data to create a Image
+     *     // ... data to create a Meal
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Image we want to update
+     *     // ... the filter for the Meal we want to update
      *   }
      * })
     **/
-    upsert<T extends ImageUpsertArgs>(
-      args: SelectSubset<T, ImageUpsertArgs>
-    ): Prisma__ImageClient<ImageGetPayload<T>>
+    upsert<T extends MealUpsertArgs>(
+      args: SelectSubset<T, MealUpsertArgs>
+    ): Prisma__MealClient<MealGetPayload<T>>
 
     /**
-     * Count the number of Images.
+     * Count the number of Meals.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImageCountArgs} args - Arguments to filter Images to count.
+     * @param {MealCountArgs} args - Arguments to filter Meals to count.
      * @example
-     * // Count the number of Images
-     * const count = await prisma.image.count({
+     * // Count the number of Meals
+     * const count = await prisma.meal.count({
      *   where: {
-     *     // ... the filter for the Images we want to count
+     *     // ... the filter for the Meals we want to count
      *   }
      * })
     **/
-    count<T extends ImageCountArgs>(
-      args?: Subset<T, ImageCountArgs>,
+    count<T extends MealCountArgs>(
+      args?: Subset<T, MealCountArgs>,
     ): Prisma.PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ImageCountAggregateOutputType>
+          : GetScalarType<T['select'], MealCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Image.
+     * Allows you to perform aggregations operations on a Meal.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {MealAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2412,13 +2572,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ImageAggregateArgs>(args: Subset<T, ImageAggregateArgs>): Prisma.PrismaPromise<GetImageAggregateType<T>>
+    aggregate<T extends MealAggregateArgs>(args: Subset<T, MealAggregateArgs>): Prisma.PrismaPromise<GetMealAggregateType<T>>
 
     /**
-     * Group by Image.
+     * Group by Meal.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImageGroupByArgs} args - Group by arguments.
+     * @param {MealGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2433,14 +2593,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ImageGroupByArgs,
+      T extends MealGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ImageGroupByArgs['orderBy'] }
-        : { orderBy?: ImageGroupByArgs['orderBy'] },
+        ? { orderBy: MealGroupByArgs['orderBy'] }
+        : { orderBy?: MealGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -2489,17 +2649,1001 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ImageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetImageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, MealGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMealGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Image.
+   * The delegate class that acts as a "Promise-like" for Meal.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__ImageClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+  export class Prisma__MealClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    images<T extends Meal$imagesArgs= {}>(args?: Subset<T, Meal$imagesArgs>): Prisma.PrismaPromise<Array<MealImageGetPayload<T>>| Null>;
+
+    vendor<T extends VendorArgs= {}>(args?: Subset<T, VendorArgs>): Prisma__VendorClient<VendorGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Meal base type for findUnique actions
+   */
+  export type MealFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * Filter, which Meal to fetch.
+     */
+    where: MealWhereUniqueInput
+  }
+
+  /**
+   * Meal findUnique
+   */
+  export interface MealFindUniqueArgs extends MealFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Meal findUniqueOrThrow
+   */
+  export type MealFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * Filter, which Meal to fetch.
+     */
+    where: MealWhereUniqueInput
+  }
+
+
+  /**
+   * Meal base type for findFirst actions
+   */
+  export type MealFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * Filter, which Meal to fetch.
+     */
+    where?: MealWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meals to fetch.
+     */
+    orderBy?: Enumerable<MealOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Meals.
+     */
+    cursor?: MealWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Meals.
+     */
+    distinct?: Enumerable<MealScalarFieldEnum>
+  }
+
+  /**
+   * Meal findFirst
+   */
+  export interface MealFindFirstArgs extends MealFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Meal findFirstOrThrow
+   */
+  export type MealFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * Filter, which Meal to fetch.
+     */
+    where?: MealWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meals to fetch.
+     */
+    orderBy?: Enumerable<MealOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Meals.
+     */
+    cursor?: MealWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Meals.
+     */
+    distinct?: Enumerable<MealScalarFieldEnum>
+  }
+
+
+  /**
+   * Meal findMany
+   */
+  export type MealFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * Filter, which Meals to fetch.
+     */
+    where?: MealWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meals to fetch.
+     */
+    orderBy?: Enumerable<MealOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Meals.
+     */
+    cursor?: MealWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meals.
+     */
+    skip?: number
+    distinct?: Enumerable<MealScalarFieldEnum>
+  }
+
+
+  /**
+   * Meal create
+   */
+  export type MealCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * The data needed to create a Meal.
+     */
+    data: XOR<MealCreateInput, MealUncheckedCreateInput>
+  }
+
+
+  /**
+   * Meal createMany
+   */
+  export type MealCreateManyArgs = {
+    /**
+     * The data used to create many Meals.
+     */
+    data: Enumerable<MealCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Meal update
+   */
+  export type MealUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * The data needed to update a Meal.
+     */
+    data: XOR<MealUpdateInput, MealUncheckedUpdateInput>
+    /**
+     * Choose, which Meal to update.
+     */
+    where: MealWhereUniqueInput
+  }
+
+
+  /**
+   * Meal updateMany
+   */
+  export type MealUpdateManyArgs = {
+    /**
+     * The data used to update Meals.
+     */
+    data: XOR<MealUpdateManyMutationInput, MealUncheckedUpdateManyInput>
+    /**
+     * Filter which Meals to update
+     */
+    where?: MealWhereInput
+  }
+
+
+  /**
+   * Meal upsert
+   */
+  export type MealUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * The filter to search for the Meal to update in case it exists.
+     */
+    where: MealWhereUniqueInput
+    /**
+     * In case the Meal found by the `where` argument doesn't exist, create a new Meal with this data.
+     */
+    create: XOR<MealCreateInput, MealUncheckedCreateInput>
+    /**
+     * In case the Meal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MealUpdateInput, MealUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Meal delete
+   */
+  export type MealDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+    /**
+     * Filter which Meal to delete.
+     */
+    where: MealWhereUniqueInput
+  }
+
+
+  /**
+   * Meal deleteMany
+   */
+  export type MealDeleteManyArgs = {
+    /**
+     * Filter which Meals to delete
+     */
+    where?: MealWhereInput
+  }
+
+
+  /**
+   * Meal.images
+   */
+  export type Meal$imagesArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    where?: MealImageWhereInput
+    orderBy?: Enumerable<MealImageOrderByWithRelationInput>
+    cursor?: MealImageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<MealImageScalarFieldEnum>
+  }
+
+
+  /**
+   * Meal without action
+   */
+  export type MealArgs = {
+    /**
+     * Select specific fields to fetch from the Meal
+     */
+    select?: MealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealInclude | null
+  }
+
+
+
+  /**
+   * Model VendorImage
+   */
+
+
+  export type AggregateVendorImage = {
+    _count: VendorImageCountAggregateOutputType | null
+    _avg: VendorImageAvgAggregateOutputType | null
+    _sum: VendorImageSumAggregateOutputType | null
+    _min: VendorImageMinAggregateOutputType | null
+    _max: VendorImageMaxAggregateOutputType | null
+  }
+
+  export type VendorImageAvgAggregateOutputType = {
+    id: number | null
+    vendorId: number | null
+  }
+
+  export type VendorImageSumAggregateOutputType = {
+    id: number | null
+    vendorId: number | null
+  }
+
+  export type VendorImageMinAggregateOutputType = {
+    id: number | null
+    vendorId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VendorImageMaxAggregateOutputType = {
+    id: number | null
+    vendorId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VendorImageCountAggregateOutputType = {
+    id: number
+    vendorId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VendorImageAvgAggregateInputType = {
+    id?: true
+    vendorId?: true
+  }
+
+  export type VendorImageSumAggregateInputType = {
+    id?: true
+    vendorId?: true
+  }
+
+  export type VendorImageMinAggregateInputType = {
+    id?: true
+    vendorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VendorImageMaxAggregateInputType = {
+    id?: true
+    vendorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VendorImageCountAggregateInputType = {
+    id?: true
+    vendorId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VendorImageAggregateArgs = {
+    /**
+     * Filter which VendorImage to aggregate.
+     */
+    where?: VendorImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VendorImages to fetch.
+     */
+    orderBy?: Enumerable<VendorImageOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VendorImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VendorImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VendorImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VendorImages
+    **/
+    _count?: true | VendorImageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VendorImageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VendorImageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VendorImageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VendorImageMaxAggregateInputType
+  }
+
+  export type GetVendorImageAggregateType<T extends VendorImageAggregateArgs> = {
+        [P in keyof T & keyof AggregateVendorImage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVendorImage[P]>
+      : GetScalarType<T[P], AggregateVendorImage[P]>
+  }
+
+
+
+
+  export type VendorImageGroupByArgs = {
+    where?: VendorImageWhereInput
+    orderBy?: Enumerable<VendorImageOrderByWithAggregationInput>
+    by: VendorImageScalarFieldEnum[]
+    having?: VendorImageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VendorImageCountAggregateInputType | true
+    _avg?: VendorImageAvgAggregateInputType
+    _sum?: VendorImageSumAggregateInputType
+    _min?: VendorImageMinAggregateInputType
+    _max?: VendorImageMaxAggregateInputType
+  }
+
+
+  export type VendorImageGroupByOutputType = {
+    id: number
+    vendorId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: VendorImageCountAggregateOutputType | null
+    _avg: VendorImageAvgAggregateOutputType | null
+    _sum: VendorImageSumAggregateOutputType | null
+    _min: VendorImageMinAggregateOutputType | null
+    _max: VendorImageMaxAggregateOutputType | null
+  }
+
+  type GetVendorImageGroupByPayload<T extends VendorImageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<VendorImageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VendorImageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VendorImageGroupByOutputType[P]>
+            : GetScalarType<T[P], VendorImageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VendorImageSelect = {
+    id?: boolean
+    vendorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Vendor?: boolean | VendorArgs
+  }
+
+
+  export type VendorImageInclude = {
+    Vendor?: boolean | VendorArgs
+  }
+
+  export type VendorImageGetPayload<S extends boolean | null | undefined | VendorImageArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? VendorImage :
+    S extends undefined ? never :
+    S extends { include: any } & (VendorImageArgs | VendorImageFindManyArgs)
+    ? VendorImage  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'Vendor' ? VendorGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (VendorImageArgs | VendorImageFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'Vendor' ? VendorGetPayload<S['select'][P]> :  P extends keyof VendorImage ? VendorImage[P] : never
+  } 
+      : VendorImage
+
+
+  type VendorImageCountArgs = 
+    Omit<VendorImageFindManyArgs, 'select' | 'include'> & {
+      select?: VendorImageCountAggregateInputType | true
+    }
+
+  export interface VendorImageDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one VendorImage that matches the filter.
+     * @param {VendorImageFindUniqueArgs} args - Arguments to find a VendorImage
+     * @example
+     * // Get one VendorImage
+     * const vendorImage = await prisma.vendorImage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends VendorImageFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, VendorImageFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'VendorImage'> extends True ? Prisma__VendorImageClient<VendorImageGetPayload<T>> : Prisma__VendorImageClient<VendorImageGetPayload<T> | null, null>
+
+    /**
+     * Find one VendorImage that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {VendorImageFindUniqueOrThrowArgs} args - Arguments to find a VendorImage
+     * @example
+     * // Get one VendorImage
+     * const vendorImage = await prisma.vendorImage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends VendorImageFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, VendorImageFindUniqueOrThrowArgs>
+    ): Prisma__VendorImageClient<VendorImageGetPayload<T>>
+
+    /**
+     * Find the first VendorImage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorImageFindFirstArgs} args - Arguments to find a VendorImage
+     * @example
+     * // Get one VendorImage
+     * const vendorImage = await prisma.vendorImage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends VendorImageFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, VendorImageFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'VendorImage'> extends True ? Prisma__VendorImageClient<VendorImageGetPayload<T>> : Prisma__VendorImageClient<VendorImageGetPayload<T> | null, null>
+
+    /**
+     * Find the first VendorImage that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorImageFindFirstOrThrowArgs} args - Arguments to find a VendorImage
+     * @example
+     * // Get one VendorImage
+     * const vendorImage = await prisma.vendorImage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends VendorImageFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, VendorImageFindFirstOrThrowArgs>
+    ): Prisma__VendorImageClient<VendorImageGetPayload<T>>
+
+    /**
+     * Find zero or more VendorImages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorImageFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VendorImages
+     * const vendorImages = await prisma.vendorImage.findMany()
+     * 
+     * // Get first 10 VendorImages
+     * const vendorImages = await prisma.vendorImage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const vendorImageWithIdOnly = await prisma.vendorImage.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends VendorImageFindManyArgs>(
+      args?: SelectSubset<T, VendorImageFindManyArgs>
+    ): Prisma.PrismaPromise<Array<VendorImageGetPayload<T>>>
+
+    /**
+     * Create a VendorImage.
+     * @param {VendorImageCreateArgs} args - Arguments to create a VendorImage.
+     * @example
+     * // Create one VendorImage
+     * const VendorImage = await prisma.vendorImage.create({
+     *   data: {
+     *     // ... data to create a VendorImage
+     *   }
+     * })
+     * 
+    **/
+    create<T extends VendorImageCreateArgs>(
+      args: SelectSubset<T, VendorImageCreateArgs>
+    ): Prisma__VendorImageClient<VendorImageGetPayload<T>>
+
+    /**
+     * Create many VendorImages.
+     *     @param {VendorImageCreateManyArgs} args - Arguments to create many VendorImages.
+     *     @example
+     *     // Create many VendorImages
+     *     const vendorImage = await prisma.vendorImage.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends VendorImageCreateManyArgs>(
+      args?: SelectSubset<T, VendorImageCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a VendorImage.
+     * @param {VendorImageDeleteArgs} args - Arguments to delete one VendorImage.
+     * @example
+     * // Delete one VendorImage
+     * const VendorImage = await prisma.vendorImage.delete({
+     *   where: {
+     *     // ... filter to delete one VendorImage
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends VendorImageDeleteArgs>(
+      args: SelectSubset<T, VendorImageDeleteArgs>
+    ): Prisma__VendorImageClient<VendorImageGetPayload<T>>
+
+    /**
+     * Update one VendorImage.
+     * @param {VendorImageUpdateArgs} args - Arguments to update one VendorImage.
+     * @example
+     * // Update one VendorImage
+     * const vendorImage = await prisma.vendorImage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends VendorImageUpdateArgs>(
+      args: SelectSubset<T, VendorImageUpdateArgs>
+    ): Prisma__VendorImageClient<VendorImageGetPayload<T>>
+
+    /**
+     * Delete zero or more VendorImages.
+     * @param {VendorImageDeleteManyArgs} args - Arguments to filter VendorImages to delete.
+     * @example
+     * // Delete a few VendorImages
+     * const { count } = await prisma.vendorImage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends VendorImageDeleteManyArgs>(
+      args?: SelectSubset<T, VendorImageDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VendorImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorImageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VendorImages
+     * const vendorImage = await prisma.vendorImage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends VendorImageUpdateManyArgs>(
+      args: SelectSubset<T, VendorImageUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one VendorImage.
+     * @param {VendorImageUpsertArgs} args - Arguments to update or create a VendorImage.
+     * @example
+     * // Update or create a VendorImage
+     * const vendorImage = await prisma.vendorImage.upsert({
+     *   create: {
+     *     // ... data to create a VendorImage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VendorImage we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends VendorImageUpsertArgs>(
+      args: SelectSubset<T, VendorImageUpsertArgs>
+    ): Prisma__VendorImageClient<VendorImageGetPayload<T>>
+
+    /**
+     * Count the number of VendorImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorImageCountArgs} args - Arguments to filter VendorImages to count.
+     * @example
+     * // Count the number of VendorImages
+     * const count = await prisma.vendorImage.count({
+     *   where: {
+     *     // ... the filter for the VendorImages we want to count
+     *   }
+     * })
+    **/
+    count<T extends VendorImageCountArgs>(
+      args?: Subset<T, VendorImageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VendorImageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VendorImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorImageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VendorImageAggregateArgs>(args: Subset<T, VendorImageAggregateArgs>): Prisma.PrismaPromise<GetVendorImageAggregateType<T>>
+
+    /**
+     * Group by VendorImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorImageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VendorImageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VendorImageGroupByArgs['orderBy'] }
+        : { orderBy?: VendorImageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VendorImageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVendorImageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VendorImage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__VendorImageClient<T, Null = never> implements Prisma.PrismaPromise<T> {
     private readonly _dmmf;
     private readonly _queryType;
     private readonly _rootField;
@@ -2544,27 +3688,27 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * Image base type for findUnique actions
+   * VendorImage base type for findUnique actions
    */
-  export type ImageFindUniqueArgsBase = {
+  export type VendorImageFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * Filter, which Image to fetch.
+     * Filter, which VendorImage to fetch.
      */
-    where: ImageWhereUniqueInput
+    where: VendorImageWhereUniqueInput
   }
 
   /**
-   * Image findUnique
+   * VendorImage findUnique
    */
-  export interface ImageFindUniqueArgs extends ImageFindUniqueArgsBase {
+  export interface VendorImageFindUniqueArgs extends VendorImageFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -2574,76 +3718,76 @@ export namespace Prisma {
       
 
   /**
-   * Image findUniqueOrThrow
+   * VendorImage findUniqueOrThrow
    */
-  export type ImageFindUniqueOrThrowArgs = {
+  export type VendorImageFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * Filter, which Image to fetch.
+     * Filter, which VendorImage to fetch.
      */
-    where: ImageWhereUniqueInput
+    where: VendorImageWhereUniqueInput
   }
 
 
   /**
-   * Image base type for findFirst actions
+   * VendorImage base type for findFirst actions
    */
-  export type ImageFindFirstArgsBase = {
+  export type VendorImageFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * Filter, which Image to fetch.
+     * Filter, which VendorImage to fetch.
      */
-    where?: ImageWhereInput
+    where?: VendorImageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of VendorImages to fetch.
      */
-    orderBy?: Enumerable<ImageOrderByWithRelationInput>
+    orderBy?: Enumerable<VendorImageOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Images.
+     * Sets the position for searching for VendorImages.
      */
-    cursor?: ImageWhereUniqueInput
+    cursor?: VendorImageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` VendorImages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` VendorImages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Images.
+     * Filter by unique combinations of VendorImages.
      */
-    distinct?: Enumerable<ImageScalarFieldEnum>
+    distinct?: Enumerable<VendorImageScalarFieldEnum>
   }
 
   /**
-   * Image findFirst
+   * VendorImage findFirst
    */
-  export interface ImageFindFirstArgs extends ImageFindFirstArgsBase {
+  export interface VendorImageFindFirstArgs extends VendorImageFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -2653,236 +3797,1193 @@ export namespace Prisma {
       
 
   /**
-   * Image findFirstOrThrow
+   * VendorImage findFirstOrThrow
    */
-  export type ImageFindFirstOrThrowArgs = {
+  export type VendorImageFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * Filter, which Image to fetch.
+     * Filter, which VendorImage to fetch.
      */
-    where?: ImageWhereInput
+    where?: VendorImageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of VendorImages to fetch.
      */
-    orderBy?: Enumerable<ImageOrderByWithRelationInput>
+    orderBy?: Enumerable<VendorImageOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Images.
+     * Sets the position for searching for VendorImages.
      */
-    cursor?: ImageWhereUniqueInput
+    cursor?: VendorImageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` VendorImages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` VendorImages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Images.
+     * Filter by unique combinations of VendorImages.
      */
-    distinct?: Enumerable<ImageScalarFieldEnum>
+    distinct?: Enumerable<VendorImageScalarFieldEnum>
   }
 
 
   /**
-   * Image findMany
+   * VendorImage findMany
    */
-  export type ImageFindManyArgs = {
+  export type VendorImageFindManyArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * Filter, which Images to fetch.
+     * Filter, which VendorImages to fetch.
      */
-    where?: ImageWhereInput
+    where?: VendorImageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of VendorImages to fetch.
      */
-    orderBy?: Enumerable<ImageOrderByWithRelationInput>
+    orderBy?: Enumerable<VendorImageOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Images.
+     * Sets the position for listing VendorImages.
      */
-    cursor?: ImageWhereUniqueInput
+    cursor?: VendorImageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` VendorImages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` VendorImages.
      */
     skip?: number
-    distinct?: Enumerable<ImageScalarFieldEnum>
+    distinct?: Enumerable<VendorImageScalarFieldEnum>
   }
 
 
   /**
-   * Image create
+   * VendorImage create
    */
-  export type ImageCreateArgs = {
+  export type VendorImageCreateArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * The data needed to create a Image.
+     * The data needed to create a VendorImage.
      */
-    data: XOR<ImageCreateInput, ImageUncheckedCreateInput>
+    data: XOR<VendorImageCreateInput, VendorImageUncheckedCreateInput>
   }
 
 
   /**
-   * Image createMany
+   * VendorImage createMany
    */
-  export type ImageCreateManyArgs = {
+  export type VendorImageCreateManyArgs = {
     /**
-     * The data used to create many Images.
+     * The data used to create many VendorImages.
      */
-    data: Enumerable<ImageCreateManyInput>
+    data: Enumerable<VendorImageCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * Image update
+   * VendorImage update
    */
-  export type ImageUpdateArgs = {
+  export type VendorImageUpdateArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * The data needed to update a Image.
+     * The data needed to update a VendorImage.
      */
-    data: XOR<ImageUpdateInput, ImageUncheckedUpdateInput>
+    data: XOR<VendorImageUpdateInput, VendorImageUncheckedUpdateInput>
     /**
-     * Choose, which Image to update.
+     * Choose, which VendorImage to update.
      */
-    where: ImageWhereUniqueInput
+    where: VendorImageWhereUniqueInput
   }
 
 
   /**
-   * Image updateMany
+   * VendorImage updateMany
    */
-  export type ImageUpdateManyArgs = {
+  export type VendorImageUpdateManyArgs = {
     /**
-     * The data used to update Images.
+     * The data used to update VendorImages.
      */
-    data: XOR<ImageUpdateManyMutationInput, ImageUncheckedUpdateManyInput>
+    data: XOR<VendorImageUpdateManyMutationInput, VendorImageUncheckedUpdateManyInput>
     /**
-     * Filter which Images to update
+     * Filter which VendorImages to update
      */
-    where?: ImageWhereInput
+    where?: VendorImageWhereInput
   }
 
 
   /**
-   * Image upsert
+   * VendorImage upsert
    */
-  export type ImageUpsertArgs = {
+  export type VendorImageUpsertArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * The filter to search for the Image to update in case it exists.
+     * The filter to search for the VendorImage to update in case it exists.
      */
-    where: ImageWhereUniqueInput
+    where: VendorImageWhereUniqueInput
     /**
-     * In case the Image found by the `where` argument doesn't exist, create a new Image with this data.
+     * In case the VendorImage found by the `where` argument doesn't exist, create a new VendorImage with this data.
      */
-    create: XOR<ImageCreateInput, ImageUncheckedCreateInput>
+    create: XOR<VendorImageCreateInput, VendorImageUncheckedCreateInput>
     /**
-     * In case the Image was found with the provided `where` argument, update it with this data.
+     * In case the VendorImage was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ImageUpdateInput, ImageUncheckedUpdateInput>
+    update: XOR<VendorImageUpdateInput, VendorImageUncheckedUpdateInput>
   }
 
 
   /**
-   * Image delete
+   * VendorImage delete
    */
-  export type ImageDeleteArgs = {
+  export type VendorImageDeleteArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
     /**
-     * Filter which Image to delete.
+     * Filter which VendorImage to delete.
      */
-    where: ImageWhereUniqueInput
+    where: VendorImageWhereUniqueInput
   }
 
 
   /**
-   * Image deleteMany
+   * VendorImage deleteMany
    */
-  export type ImageDeleteManyArgs = {
+  export type VendorImageDeleteManyArgs = {
     /**
-     * Filter which Images to delete
+     * Filter which VendorImages to delete
      */
-    where?: ImageWhereInput
+    where?: VendorImageWhereInput
   }
 
 
   /**
-   * Image without action
+   * VendorImage without action
    */
-  export type ImageArgs = {
+  export type VendorImageArgs = {
     /**
-     * Select specific fields to fetch from the Image
+     * Select specific fields to fetch from the VendorImage
      */
-    select?: ImageSelect | null
+    select?: VendorImageSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: ImageInclude | null
+    include?: VendorImageInclude | null
+  }
+
+
+
+  /**
+   * Model MealImage
+   */
+
+
+  export type AggregateMealImage = {
+    _count: MealImageCountAggregateOutputType | null
+    _avg: MealImageAvgAggregateOutputType | null
+    _sum: MealImageSumAggregateOutputType | null
+    _min: MealImageMinAggregateOutputType | null
+    _max: MealImageMaxAggregateOutputType | null
+  }
+
+  export type MealImageAvgAggregateOutputType = {
+    id: number | null
+    price: number | null
+    mealId: number | null
+  }
+
+  export type MealImageSumAggregateOutputType = {
+    id: number | null
+    price: number | null
+    mealId: number | null
+  }
+
+  export type MealImageMinAggregateOutputType = {
+    id: number | null
+    price: number | null
+    mealId: number | null
+  }
+
+  export type MealImageMaxAggregateOutputType = {
+    id: number | null
+    price: number | null
+    mealId: number | null
+  }
+
+  export type MealImageCountAggregateOutputType = {
+    id: number
+    price: number
+    mealId: number
+    _all: number
+  }
+
+
+  export type MealImageAvgAggregateInputType = {
+    id?: true
+    price?: true
+    mealId?: true
+  }
+
+  export type MealImageSumAggregateInputType = {
+    id?: true
+    price?: true
+    mealId?: true
+  }
+
+  export type MealImageMinAggregateInputType = {
+    id?: true
+    price?: true
+    mealId?: true
+  }
+
+  export type MealImageMaxAggregateInputType = {
+    id?: true
+    price?: true
+    mealId?: true
+  }
+
+  export type MealImageCountAggregateInputType = {
+    id?: true
+    price?: true
+    mealId?: true
+    _all?: true
+  }
+
+  export type MealImageAggregateArgs = {
+    /**
+     * Filter which MealImage to aggregate.
+     */
+    where?: MealImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MealImages to fetch.
+     */
+    orderBy?: Enumerable<MealImageOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MealImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MealImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MealImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MealImages
+    **/
+    _count?: true | MealImageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MealImageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MealImageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MealImageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MealImageMaxAggregateInputType
+  }
+
+  export type GetMealImageAggregateType<T extends MealImageAggregateArgs> = {
+        [P in keyof T & keyof AggregateMealImage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMealImage[P]>
+      : GetScalarType<T[P], AggregateMealImage[P]>
+  }
+
+
+
+
+  export type MealImageGroupByArgs = {
+    where?: MealImageWhereInput
+    orderBy?: Enumerable<MealImageOrderByWithAggregationInput>
+    by: MealImageScalarFieldEnum[]
+    having?: MealImageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MealImageCountAggregateInputType | true
+    _avg?: MealImageAvgAggregateInputType
+    _sum?: MealImageSumAggregateInputType
+    _min?: MealImageMinAggregateInputType
+    _max?: MealImageMaxAggregateInputType
+  }
+
+
+  export type MealImageGroupByOutputType = {
+    id: number
+    price: number
+    mealId: number
+    _count: MealImageCountAggregateOutputType | null
+    _avg: MealImageAvgAggregateOutputType | null
+    _sum: MealImageSumAggregateOutputType | null
+    _min: MealImageMinAggregateOutputType | null
+    _max: MealImageMaxAggregateOutputType | null
+  }
+
+  type GetMealImageGroupByPayload<T extends MealImageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<MealImageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MealImageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MealImageGroupByOutputType[P]>
+            : GetScalarType<T[P], MealImageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MealImageSelect = {
+    id?: boolean
+    price?: boolean
+    mealId?: boolean
+    meal?: boolean | MealArgs
+  }
+
+
+  export type MealImageInclude = {
+    meal?: boolean | MealArgs
+  }
+
+  export type MealImageGetPayload<S extends boolean | null | undefined | MealImageArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? MealImage :
+    S extends undefined ? never :
+    S extends { include: any } & (MealImageArgs | MealImageFindManyArgs)
+    ? MealImage  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'meal' ? MealGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (MealImageArgs | MealImageFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'meal' ? MealGetPayload<S['select'][P]> :  P extends keyof MealImage ? MealImage[P] : never
+  } 
+      : MealImage
+
+
+  type MealImageCountArgs = 
+    Omit<MealImageFindManyArgs, 'select' | 'include'> & {
+      select?: MealImageCountAggregateInputType | true
+    }
+
+  export interface MealImageDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one MealImage that matches the filter.
+     * @param {MealImageFindUniqueArgs} args - Arguments to find a MealImage
+     * @example
+     * // Get one MealImage
+     * const mealImage = await prisma.mealImage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends MealImageFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, MealImageFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'MealImage'> extends True ? Prisma__MealImageClient<MealImageGetPayload<T>> : Prisma__MealImageClient<MealImageGetPayload<T> | null, null>
+
+    /**
+     * Find one MealImage that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {MealImageFindUniqueOrThrowArgs} args - Arguments to find a MealImage
+     * @example
+     * // Get one MealImage
+     * const mealImage = await prisma.mealImage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends MealImageFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, MealImageFindUniqueOrThrowArgs>
+    ): Prisma__MealImageClient<MealImageGetPayload<T>>
+
+    /**
+     * Find the first MealImage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MealImageFindFirstArgs} args - Arguments to find a MealImage
+     * @example
+     * // Get one MealImage
+     * const mealImage = await prisma.mealImage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends MealImageFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, MealImageFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'MealImage'> extends True ? Prisma__MealImageClient<MealImageGetPayload<T>> : Prisma__MealImageClient<MealImageGetPayload<T> | null, null>
+
+    /**
+     * Find the first MealImage that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MealImageFindFirstOrThrowArgs} args - Arguments to find a MealImage
+     * @example
+     * // Get one MealImage
+     * const mealImage = await prisma.mealImage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends MealImageFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, MealImageFindFirstOrThrowArgs>
+    ): Prisma__MealImageClient<MealImageGetPayload<T>>
+
+    /**
+     * Find zero or more MealImages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MealImageFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MealImages
+     * const mealImages = await prisma.mealImage.findMany()
+     * 
+     * // Get first 10 MealImages
+     * const mealImages = await prisma.mealImage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mealImageWithIdOnly = await prisma.mealImage.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends MealImageFindManyArgs>(
+      args?: SelectSubset<T, MealImageFindManyArgs>
+    ): Prisma.PrismaPromise<Array<MealImageGetPayload<T>>>
+
+    /**
+     * Create a MealImage.
+     * @param {MealImageCreateArgs} args - Arguments to create a MealImage.
+     * @example
+     * // Create one MealImage
+     * const MealImage = await prisma.mealImage.create({
+     *   data: {
+     *     // ... data to create a MealImage
+     *   }
+     * })
+     * 
+    **/
+    create<T extends MealImageCreateArgs>(
+      args: SelectSubset<T, MealImageCreateArgs>
+    ): Prisma__MealImageClient<MealImageGetPayload<T>>
+
+    /**
+     * Create many MealImages.
+     *     @param {MealImageCreateManyArgs} args - Arguments to create many MealImages.
+     *     @example
+     *     // Create many MealImages
+     *     const mealImage = await prisma.mealImage.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends MealImageCreateManyArgs>(
+      args?: SelectSubset<T, MealImageCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a MealImage.
+     * @param {MealImageDeleteArgs} args - Arguments to delete one MealImage.
+     * @example
+     * // Delete one MealImage
+     * const MealImage = await prisma.mealImage.delete({
+     *   where: {
+     *     // ... filter to delete one MealImage
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends MealImageDeleteArgs>(
+      args: SelectSubset<T, MealImageDeleteArgs>
+    ): Prisma__MealImageClient<MealImageGetPayload<T>>
+
+    /**
+     * Update one MealImage.
+     * @param {MealImageUpdateArgs} args - Arguments to update one MealImage.
+     * @example
+     * // Update one MealImage
+     * const mealImage = await prisma.mealImage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends MealImageUpdateArgs>(
+      args: SelectSubset<T, MealImageUpdateArgs>
+    ): Prisma__MealImageClient<MealImageGetPayload<T>>
+
+    /**
+     * Delete zero or more MealImages.
+     * @param {MealImageDeleteManyArgs} args - Arguments to filter MealImages to delete.
+     * @example
+     * // Delete a few MealImages
+     * const { count } = await prisma.mealImage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends MealImageDeleteManyArgs>(
+      args?: SelectSubset<T, MealImageDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MealImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MealImageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MealImages
+     * const mealImage = await prisma.mealImage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends MealImageUpdateManyArgs>(
+      args: SelectSubset<T, MealImageUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MealImage.
+     * @param {MealImageUpsertArgs} args - Arguments to update or create a MealImage.
+     * @example
+     * // Update or create a MealImage
+     * const mealImage = await prisma.mealImage.upsert({
+     *   create: {
+     *     // ... data to create a MealImage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MealImage we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends MealImageUpsertArgs>(
+      args: SelectSubset<T, MealImageUpsertArgs>
+    ): Prisma__MealImageClient<MealImageGetPayload<T>>
+
+    /**
+     * Count the number of MealImages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MealImageCountArgs} args - Arguments to filter MealImages to count.
+     * @example
+     * // Count the number of MealImages
+     * const count = await prisma.mealImage.count({
+     *   where: {
+     *     // ... the filter for the MealImages we want to count
+     *   }
+     * })
+    **/
+    count<T extends MealImageCountArgs>(
+      args?: Subset<T, MealImageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MealImageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MealImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MealImageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MealImageAggregateArgs>(args: Subset<T, MealImageAggregateArgs>): Prisma.PrismaPromise<GetMealImageAggregateType<T>>
+
+    /**
+     * Group by MealImage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MealImageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MealImageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MealImageGroupByArgs['orderBy'] }
+        : { orderBy?: MealImageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MealImageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMealImageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MealImage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__MealImageClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    meal<T extends MealArgs= {}>(args?: Subset<T, MealArgs>): Prisma__MealClient<MealGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * MealImage base type for findUnique actions
+   */
+  export type MealImageFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * Filter, which MealImage to fetch.
+     */
+    where: MealImageWhereUniqueInput
+  }
+
+  /**
+   * MealImage findUnique
+   */
+  export interface MealImageFindUniqueArgs extends MealImageFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * MealImage findUniqueOrThrow
+   */
+  export type MealImageFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * Filter, which MealImage to fetch.
+     */
+    where: MealImageWhereUniqueInput
+  }
+
+
+  /**
+   * MealImage base type for findFirst actions
+   */
+  export type MealImageFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * Filter, which MealImage to fetch.
+     */
+    where?: MealImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MealImages to fetch.
+     */
+    orderBy?: Enumerable<MealImageOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MealImages.
+     */
+    cursor?: MealImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MealImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MealImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MealImages.
+     */
+    distinct?: Enumerable<MealImageScalarFieldEnum>
+  }
+
+  /**
+   * MealImage findFirst
+   */
+  export interface MealImageFindFirstArgs extends MealImageFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * MealImage findFirstOrThrow
+   */
+  export type MealImageFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * Filter, which MealImage to fetch.
+     */
+    where?: MealImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MealImages to fetch.
+     */
+    orderBy?: Enumerable<MealImageOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MealImages.
+     */
+    cursor?: MealImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MealImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MealImages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MealImages.
+     */
+    distinct?: Enumerable<MealImageScalarFieldEnum>
+  }
+
+
+  /**
+   * MealImage findMany
+   */
+  export type MealImageFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * Filter, which MealImages to fetch.
+     */
+    where?: MealImageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MealImages to fetch.
+     */
+    orderBy?: Enumerable<MealImageOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MealImages.
+     */
+    cursor?: MealImageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MealImages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MealImages.
+     */
+    skip?: number
+    distinct?: Enumerable<MealImageScalarFieldEnum>
+  }
+
+
+  /**
+   * MealImage create
+   */
+  export type MealImageCreateArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * The data needed to create a MealImage.
+     */
+    data: XOR<MealImageCreateInput, MealImageUncheckedCreateInput>
+  }
+
+
+  /**
+   * MealImage createMany
+   */
+  export type MealImageCreateManyArgs = {
+    /**
+     * The data used to create many MealImages.
+     */
+    data: Enumerable<MealImageCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * MealImage update
+   */
+  export type MealImageUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * The data needed to update a MealImage.
+     */
+    data: XOR<MealImageUpdateInput, MealImageUncheckedUpdateInput>
+    /**
+     * Choose, which MealImage to update.
+     */
+    where: MealImageWhereUniqueInput
+  }
+
+
+  /**
+   * MealImage updateMany
+   */
+  export type MealImageUpdateManyArgs = {
+    /**
+     * The data used to update MealImages.
+     */
+    data: XOR<MealImageUpdateManyMutationInput, MealImageUncheckedUpdateManyInput>
+    /**
+     * Filter which MealImages to update
+     */
+    where?: MealImageWhereInput
+  }
+
+
+  /**
+   * MealImage upsert
+   */
+  export type MealImageUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * The filter to search for the MealImage to update in case it exists.
+     */
+    where: MealImageWhereUniqueInput
+    /**
+     * In case the MealImage found by the `where` argument doesn't exist, create a new MealImage with this data.
+     */
+    create: XOR<MealImageCreateInput, MealImageUncheckedCreateInput>
+    /**
+     * In case the MealImage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MealImageUpdateInput, MealImageUncheckedUpdateInput>
+  }
+
+
+  /**
+   * MealImage delete
+   */
+  export type MealImageDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
+    /**
+     * Filter which MealImage to delete.
+     */
+    where: MealImageWhereUniqueInput
+  }
+
+
+  /**
+   * MealImage deleteMany
+   */
+  export type MealImageDeleteManyArgs = {
+    /**
+     * Filter which MealImages to delete
+     */
+    where?: MealImageWhereInput
+  }
+
+
+  /**
+   * MealImage without action
+   */
+  export type MealImageArgs = {
+    /**
+     * Select specific fields to fetch from the MealImage
+     */
+    select?: MealImageSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: MealImageInclude | null
   }
 
 
@@ -2894,14 +4995,26 @@ export namespace Prisma {
   // Based on
   // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 
-  export const ImageScalarFieldEnum: {
+  export const MealImageScalarFieldEnum: {
     id: 'id',
-    vendorId: 'vendorId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    price: 'price',
+    mealId: 'mealId'
   };
 
-  export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
+  export type MealImageScalarFieldEnum = (typeof MealImageScalarFieldEnum)[keyof typeof MealImageScalarFieldEnum]
+
+
+  export const MealScalarFieldEnum: {
+    id: 'id',
+    mealName: 'mealName',
+    rating: 'rating',
+    timeToBeReady: 'timeToBeReady',
+    category: 'category',
+    type: 'type',
+    vendorId: 'vendorId'
+  };
+
+  export type MealScalarFieldEnum = (typeof MealScalarFieldEnum)[keyof typeof MealScalarFieldEnum]
 
 
   export const QueryMode: {
@@ -2928,6 +5041,16 @@ export namespace Prisma {
   };
 
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+  export const VendorImageScalarFieldEnum: {
+    id: 'id',
+    vendorId: 'vendorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VendorImageScalarFieldEnum = (typeof VendorImageScalarFieldEnum)[keyof typeof VendorImageScalarFieldEnum]
 
 
   export const VendorScalarFieldEnum: {
@@ -2971,7 +5094,8 @@ export namespace Prisma {
     isServiceAvailable?: BoolNullableFilter | boolean | null
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
-    coverImages?: ImageListRelationFilter
+    coverImages?: VendorImageListRelationFilter
+    meals?: MealListRelationFilter
   }
 
   export type VendorOrderByWithRelationInput = {
@@ -2988,7 +5112,8 @@ export namespace Prisma {
     isServiceAvailable?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    coverImages?: ImageOrderByRelationAggregateInput
+    coverImages?: VendorImageOrderByRelationAggregateInput
+    meals?: MealOrderByRelationAggregateInput
   }
 
   export type VendorWhereUniqueInput = {
@@ -3036,10 +5161,69 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
-  export type ImageWhereInput = {
-    AND?: Enumerable<ImageWhereInput>
-    OR?: Enumerable<ImageWhereInput>
-    NOT?: Enumerable<ImageWhereInput>
+  export type MealWhereInput = {
+    AND?: Enumerable<MealWhereInput>
+    OR?: Enumerable<MealWhereInput>
+    NOT?: Enumerable<MealWhereInput>
+    id?: IntFilter | number
+    mealName?: StringFilter | string
+    rating?: IntFilter | number
+    timeToBeReady?: DateTimeFilter | Date | string
+    category?: EnumFoodCategoryFilter | FoodCategory
+    type?: EnumFoodTypeFilter | FoodType
+    vendorId?: IntFilter | number
+    images?: MealImageListRelationFilter
+    vendor?: XOR<VendorRelationFilter, VendorWhereInput>
+  }
+
+  export type MealOrderByWithRelationInput = {
+    id?: SortOrder
+    mealName?: SortOrder
+    rating?: SortOrder
+    timeToBeReady?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    vendorId?: SortOrder
+    images?: MealImageOrderByRelationAggregateInput
+    vendor?: VendorOrderByWithRelationInput
+  }
+
+  export type MealWhereUniqueInput = {
+    id?: number
+  }
+
+  export type MealOrderByWithAggregationInput = {
+    id?: SortOrder
+    mealName?: SortOrder
+    rating?: SortOrder
+    timeToBeReady?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    vendorId?: SortOrder
+    _count?: MealCountOrderByAggregateInput
+    _avg?: MealAvgOrderByAggregateInput
+    _max?: MealMaxOrderByAggregateInput
+    _min?: MealMinOrderByAggregateInput
+    _sum?: MealSumOrderByAggregateInput
+  }
+
+  export type MealScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<MealScalarWhereWithAggregatesInput>
+    OR?: Enumerable<MealScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<MealScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    mealName?: StringWithAggregatesFilter | string
+    rating?: IntWithAggregatesFilter | number
+    timeToBeReady?: DateTimeWithAggregatesFilter | Date | string
+    category?: EnumFoodCategoryWithAggregatesFilter | FoodCategory
+    type?: EnumFoodTypeWithAggregatesFilter | FoodType
+    vendorId?: IntWithAggregatesFilter | number
+  }
+
+  export type VendorImageWhereInput = {
+    AND?: Enumerable<VendorImageWhereInput>
+    OR?: Enumerable<VendorImageWhereInput>
+    NOT?: Enumerable<VendorImageWhereInput>
     id?: IntFilter | number
     vendorId?: IntFilter | number
     createdAt?: DateTimeFilter | Date | string
@@ -3047,7 +5231,7 @@ export namespace Prisma {
     Vendor?: XOR<VendorRelationFilter, VendorWhereInput>
   }
 
-  export type ImageOrderByWithRelationInput = {
+  export type VendorImageOrderByWithRelationInput = {
     id?: SortOrder
     vendorId?: SortOrder
     createdAt?: SortOrder
@@ -3055,30 +5239,71 @@ export namespace Prisma {
     Vendor?: VendorOrderByWithRelationInput
   }
 
-  export type ImageWhereUniqueInput = {
+  export type VendorImageWhereUniqueInput = {
     id?: number
   }
 
-  export type ImageOrderByWithAggregationInput = {
+  export type VendorImageOrderByWithAggregationInput = {
     id?: SortOrder
     vendorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: ImageCountOrderByAggregateInput
-    _avg?: ImageAvgOrderByAggregateInput
-    _max?: ImageMaxOrderByAggregateInput
-    _min?: ImageMinOrderByAggregateInput
-    _sum?: ImageSumOrderByAggregateInput
+    _count?: VendorImageCountOrderByAggregateInput
+    _avg?: VendorImageAvgOrderByAggregateInput
+    _max?: VendorImageMaxOrderByAggregateInput
+    _min?: VendorImageMinOrderByAggregateInput
+    _sum?: VendorImageSumOrderByAggregateInput
   }
 
-  export type ImageScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<ImageScalarWhereWithAggregatesInput>
-    OR?: Enumerable<ImageScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<ImageScalarWhereWithAggregatesInput>
+  export type VendorImageScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<VendorImageScalarWhereWithAggregatesInput>
+    OR?: Enumerable<VendorImageScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<VendorImageScalarWhereWithAggregatesInput>
     id?: IntWithAggregatesFilter | number
     vendorId?: IntWithAggregatesFilter | number
     createdAt?: DateTimeWithAggregatesFilter | Date | string
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
+  }
+
+  export type MealImageWhereInput = {
+    AND?: Enumerable<MealImageWhereInput>
+    OR?: Enumerable<MealImageWhereInput>
+    NOT?: Enumerable<MealImageWhereInput>
+    id?: IntFilter | number
+    price?: FloatFilter | number
+    mealId?: IntFilter | number
+    meal?: XOR<MealRelationFilter, MealWhereInput>
+  }
+
+  export type MealImageOrderByWithRelationInput = {
+    id?: SortOrder
+    price?: SortOrder
+    mealId?: SortOrder
+    meal?: MealOrderByWithRelationInput
+  }
+
+  export type MealImageWhereUniqueInput = {
+    id?: number
+  }
+
+  export type MealImageOrderByWithAggregationInput = {
+    id?: SortOrder
+    price?: SortOrder
+    mealId?: SortOrder
+    _count?: MealImageCountOrderByAggregateInput
+    _avg?: MealImageAvgOrderByAggregateInput
+    _max?: MealImageMaxOrderByAggregateInput
+    _min?: MealImageMinOrderByAggregateInput
+    _sum?: MealImageSumOrderByAggregateInput
+  }
+
+  export type MealImageScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<MealImageScalarWhereWithAggregatesInput>
+    OR?: Enumerable<MealImageScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<MealImageScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    price?: FloatWithAggregatesFilter | number
+    mealId?: IntWithAggregatesFilter | number
   }
 
   export type VendorCreateInput = {
@@ -3094,7 +5319,8 @@ export namespace Prisma {
     isServiceAvailable?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    coverImages?: ImageCreateNestedManyWithoutVendorInput
+    coverImages?: VendorImageCreateNestedManyWithoutVendorInput
+    meals?: MealCreateNestedManyWithoutVendorInput
   }
 
   export type VendorUncheckedCreateInput = {
@@ -3111,7 +5337,8 @@ export namespace Prisma {
     isServiceAvailable?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    coverImages?: ImageUncheckedCreateNestedManyWithoutVendorInput
+    coverImages?: VendorImageUncheckedCreateNestedManyWithoutVendorInput
+    meals?: MealUncheckedCreateNestedManyWithoutVendorInput
   }
 
   export type VendorUpdateInput = {
@@ -3127,7 +5354,8 @@ export namespace Prisma {
     isServiceAvailable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    coverImages?: ImageUpdateManyWithoutVendorNestedInput
+    coverImages?: VendorImageUpdateManyWithoutVendorNestedInput
+    meals?: MealUpdateManyWithoutVendorNestedInput
   }
 
   export type VendorUncheckedUpdateInput = {
@@ -3144,7 +5372,8 @@ export namespace Prisma {
     isServiceAvailable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    coverImages?: ImageUncheckedUpdateManyWithoutVendorNestedInput
+    coverImages?: VendorImageUncheckedUpdateManyWithoutVendorNestedInput
+    meals?: MealUncheckedUpdateManyWithoutVendorNestedInput
   }
 
   export type VendorCreateManyInput = {
@@ -3194,49 +5423,157 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ImageCreateInput = {
+  export type MealCreateInput = {
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+    images?: MealImageCreateNestedManyWithoutMealInput
+    vendor: VendorCreateNestedOneWithoutMealsInput
+  }
+
+  export type MealUncheckedCreateInput = {
+    id?: number
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+    vendorId: number
+    images?: MealImageUncheckedCreateNestedManyWithoutMealInput
+  }
+
+  export type MealUpdateInput = {
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+    images?: MealImageUpdateManyWithoutMealNestedInput
+    vendor?: VendorUpdateOneRequiredWithoutMealsNestedInput
+  }
+
+  export type MealUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+    vendorId?: IntFieldUpdateOperationsInput | number
+    images?: MealImageUncheckedUpdateManyWithoutMealNestedInput
+  }
+
+  export type MealCreateManyInput = {
+    id?: number
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+    vendorId: number
+  }
+
+  export type MealUpdateManyMutationInput = {
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+  }
+
+  export type MealUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+    vendorId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type VendorImageCreateInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
     Vendor: VendorCreateNestedOneWithoutCoverImagesInput
   }
 
-  export type ImageUncheckedCreateInput = {
+  export type VendorImageUncheckedCreateInput = {
     id?: number
     vendorId: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ImageUpdateInput = {
+  export type VendorImageUpdateInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Vendor?: VendorUpdateOneRequiredWithoutCoverImagesNestedInput
   }
 
-  export type ImageUncheckedUpdateInput = {
+  export type VendorImageUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     vendorId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ImageCreateManyInput = {
+  export type VendorImageCreateManyInput = {
     id?: number
     vendorId: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ImageUpdateManyMutationInput = {
+  export type VendorImageUpdateManyMutationInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ImageUncheckedUpdateManyInput = {
+  export type VendorImageUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     vendorId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MealImageCreateInput = {
+    price: number
+    meal: MealCreateNestedOneWithoutImagesInput
+  }
+
+  export type MealImageUncheckedCreateInput = {
+    id?: number
+    price: number
+    mealId: number
+  }
+
+  export type MealImageUpdateInput = {
+    price?: FloatFieldUpdateOperationsInput | number
+    meal?: MealUpdateOneRequiredWithoutImagesNestedInput
+  }
+
+  export type MealImageUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
+    mealId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type MealImageCreateManyInput = {
+    id?: number
+    price: number
+    mealId: number
+  }
+
+  export type MealImageUpdateManyMutationInput = {
+    price?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type MealImageUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
+    mealId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter = {
@@ -3304,13 +5641,23 @@ export namespace Prisma {
     not?: NestedDateTimeFilter | Date | string
   }
 
-  export type ImageListRelationFilter = {
-    every?: ImageWhereInput
-    some?: ImageWhereInput
-    none?: ImageWhereInput
+  export type VendorImageListRelationFilter = {
+    every?: VendorImageWhereInput
+    some?: VendorImageWhereInput
+    none?: VendorImageWhereInput
   }
 
-  export type ImageOrderByRelationAggregateInput = {
+  export type MealListRelationFilter = {
+    every?: MealWhereInput
+    some?: MealWhereInput
+    none?: MealWhereInput
+  }
+
+  export type VendorImageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MealOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3442,58 +5789,220 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter
   }
 
+  export type EnumFoodCategoryFilter = {
+    equals?: FoodCategory
+    in?: Enumerable<FoodCategory>
+    notIn?: Enumerable<FoodCategory>
+    not?: NestedEnumFoodCategoryFilter | FoodCategory
+  }
+
+  export type EnumFoodTypeFilter = {
+    equals?: FoodType
+    in?: Enumerable<FoodType>
+    notIn?: Enumerable<FoodType>
+    not?: NestedEnumFoodTypeFilter | FoodType
+  }
+
+  export type MealImageListRelationFilter = {
+    every?: MealImageWhereInput
+    some?: MealImageWhereInput
+    none?: MealImageWhereInput
+  }
+
   export type VendorRelationFilter = {
     is?: VendorWhereInput
     isNot?: VendorWhereInput
   }
 
-  export type ImageCountOrderByAggregateInput = {
+  export type MealImageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MealCountOrderByAggregateInput = {
+    id?: SortOrder
+    mealName?: SortOrder
+    rating?: SortOrder
+    timeToBeReady?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    vendorId?: SortOrder
+  }
+
+  export type MealAvgOrderByAggregateInput = {
+    id?: SortOrder
+    rating?: SortOrder
+    vendorId?: SortOrder
+  }
+
+  export type MealMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mealName?: SortOrder
+    rating?: SortOrder
+    timeToBeReady?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    vendorId?: SortOrder
+  }
+
+  export type MealMinOrderByAggregateInput = {
+    id?: SortOrder
+    mealName?: SortOrder
+    rating?: SortOrder
+    timeToBeReady?: SortOrder
+    category?: SortOrder
+    type?: SortOrder
+    vendorId?: SortOrder
+  }
+
+  export type MealSumOrderByAggregateInput = {
+    id?: SortOrder
+    rating?: SortOrder
+    vendorId?: SortOrder
+  }
+
+  export type EnumFoodCategoryWithAggregatesFilter = {
+    equals?: FoodCategory
+    in?: Enumerable<FoodCategory>
+    notIn?: Enumerable<FoodCategory>
+    not?: NestedEnumFoodCategoryWithAggregatesFilter | FoodCategory
+    _count?: NestedIntFilter
+    _min?: NestedEnumFoodCategoryFilter
+    _max?: NestedEnumFoodCategoryFilter
+  }
+
+  export type EnumFoodTypeWithAggregatesFilter = {
+    equals?: FoodType
+    in?: Enumerable<FoodType>
+    notIn?: Enumerable<FoodType>
+    not?: NestedEnumFoodTypeWithAggregatesFilter | FoodType
+    _count?: NestedIntFilter
+    _min?: NestedEnumFoodTypeFilter
+    _max?: NestedEnumFoodTypeFilter
+  }
+
+  export type VendorImageCountOrderByAggregateInput = {
     id?: SortOrder
     vendorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type ImageAvgOrderByAggregateInput = {
+  export type VendorImageAvgOrderByAggregateInput = {
     id?: SortOrder
     vendorId?: SortOrder
   }
 
-  export type ImageMaxOrderByAggregateInput = {
+  export type VendorImageMaxOrderByAggregateInput = {
     id?: SortOrder
     vendorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type ImageMinOrderByAggregateInput = {
+  export type VendorImageMinOrderByAggregateInput = {
     id?: SortOrder
     vendorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type ImageSumOrderByAggregateInput = {
+  export type VendorImageSumOrderByAggregateInput = {
     id?: SortOrder
     vendorId?: SortOrder
+  }
+
+  export type FloatFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatFilter | number
+  }
+
+  export type MealRelationFilter = {
+    is?: MealWhereInput
+    isNot?: MealWhereInput
+  }
+
+  export type MealImageCountOrderByAggregateInput = {
+    id?: SortOrder
+    price?: SortOrder
+    mealId?: SortOrder
+  }
+
+  export type MealImageAvgOrderByAggregateInput = {
+    id?: SortOrder
+    price?: SortOrder
+    mealId?: SortOrder
+  }
+
+  export type MealImageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    price?: SortOrder
+    mealId?: SortOrder
+  }
+
+  export type MealImageMinOrderByAggregateInput = {
+    id?: SortOrder
+    price?: SortOrder
+    mealId?: SortOrder
+  }
+
+  export type MealImageSumOrderByAggregateInput = {
+    id?: SortOrder
+    price?: SortOrder
+    mealId?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedFloatFilter
+    _min?: NestedFloatFilter
+    _max?: NestedFloatFilter
   }
 
   export type VendorCreatefoodTypeInput = {
     set: Enumerable<FoodType>
   }
 
-  export type ImageCreateNestedManyWithoutVendorInput = {
-    create?: XOR<Enumerable<ImageCreateWithoutVendorInput>, Enumerable<ImageUncheckedCreateWithoutVendorInput>>
-    connectOrCreate?: Enumerable<ImageCreateOrConnectWithoutVendorInput>
-    createMany?: ImageCreateManyVendorInputEnvelope
-    connect?: Enumerable<ImageWhereUniqueInput>
+  export type VendorImageCreateNestedManyWithoutVendorInput = {
+    create?: XOR<Enumerable<VendorImageCreateWithoutVendorInput>, Enumerable<VendorImageUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<VendorImageCreateOrConnectWithoutVendorInput>
+    createMany?: VendorImageCreateManyVendorInputEnvelope
+    connect?: Enumerable<VendorImageWhereUniqueInput>
   }
 
-  export type ImageUncheckedCreateNestedManyWithoutVendorInput = {
-    create?: XOR<Enumerable<ImageCreateWithoutVendorInput>, Enumerable<ImageUncheckedCreateWithoutVendorInput>>
-    connectOrCreate?: Enumerable<ImageCreateOrConnectWithoutVendorInput>
-    createMany?: ImageCreateManyVendorInputEnvelope
-    connect?: Enumerable<ImageWhereUniqueInput>
+  export type MealCreateNestedManyWithoutVendorInput = {
+    create?: XOR<Enumerable<MealCreateWithoutVendorInput>, Enumerable<MealUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<MealCreateOrConnectWithoutVendorInput>
+    createMany?: MealCreateManyVendorInputEnvelope
+    connect?: Enumerable<MealWhereUniqueInput>
+  }
+
+  export type VendorImageUncheckedCreateNestedManyWithoutVendorInput = {
+    create?: XOR<Enumerable<VendorImageCreateWithoutVendorInput>, Enumerable<VendorImageUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<VendorImageCreateOrConnectWithoutVendorInput>
+    createMany?: VendorImageCreateManyVendorInputEnvelope
+    connect?: Enumerable<VendorImageWhereUniqueInput>
+  }
+
+  export type MealUncheckedCreateNestedManyWithoutVendorInput = {
+    create?: XOR<Enumerable<MealCreateWithoutVendorInput>, Enumerable<MealUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<MealCreateOrConnectWithoutVendorInput>
+    createMany?: MealCreateManyVendorInputEnvelope
+    connect?: Enumerable<MealWhereUniqueInput>
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3517,18 +6026,32 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type ImageUpdateManyWithoutVendorNestedInput = {
-    create?: XOR<Enumerable<ImageCreateWithoutVendorInput>, Enumerable<ImageUncheckedCreateWithoutVendorInput>>
-    connectOrCreate?: Enumerable<ImageCreateOrConnectWithoutVendorInput>
-    upsert?: Enumerable<ImageUpsertWithWhereUniqueWithoutVendorInput>
-    createMany?: ImageCreateManyVendorInputEnvelope
-    set?: Enumerable<ImageWhereUniqueInput>
-    disconnect?: Enumerable<ImageWhereUniqueInput>
-    delete?: Enumerable<ImageWhereUniqueInput>
-    connect?: Enumerable<ImageWhereUniqueInput>
-    update?: Enumerable<ImageUpdateWithWhereUniqueWithoutVendorInput>
-    updateMany?: Enumerable<ImageUpdateManyWithWhereWithoutVendorInput>
-    deleteMany?: Enumerable<ImageScalarWhereInput>
+  export type VendorImageUpdateManyWithoutVendorNestedInput = {
+    create?: XOR<Enumerable<VendorImageCreateWithoutVendorInput>, Enumerable<VendorImageUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<VendorImageCreateOrConnectWithoutVendorInput>
+    upsert?: Enumerable<VendorImageUpsertWithWhereUniqueWithoutVendorInput>
+    createMany?: VendorImageCreateManyVendorInputEnvelope
+    set?: Enumerable<VendorImageWhereUniqueInput>
+    disconnect?: Enumerable<VendorImageWhereUniqueInput>
+    delete?: Enumerable<VendorImageWhereUniqueInput>
+    connect?: Enumerable<VendorImageWhereUniqueInput>
+    update?: Enumerable<VendorImageUpdateWithWhereUniqueWithoutVendorInput>
+    updateMany?: Enumerable<VendorImageUpdateManyWithWhereWithoutVendorInput>
+    deleteMany?: Enumerable<VendorImageScalarWhereInput>
+  }
+
+  export type MealUpdateManyWithoutVendorNestedInput = {
+    create?: XOR<Enumerable<MealCreateWithoutVendorInput>, Enumerable<MealUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<MealCreateOrConnectWithoutVendorInput>
+    upsert?: Enumerable<MealUpsertWithWhereUniqueWithoutVendorInput>
+    createMany?: MealCreateManyVendorInputEnvelope
+    set?: Enumerable<MealWhereUniqueInput>
+    disconnect?: Enumerable<MealWhereUniqueInput>
+    delete?: Enumerable<MealWhereUniqueInput>
+    connect?: Enumerable<MealWhereUniqueInput>
+    update?: Enumerable<MealUpdateWithWhereUniqueWithoutVendorInput>
+    updateMany?: Enumerable<MealUpdateManyWithWhereWithoutVendorInput>
+    deleteMany?: Enumerable<MealScalarWhereInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -3539,18 +6062,96 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type ImageUncheckedUpdateManyWithoutVendorNestedInput = {
-    create?: XOR<Enumerable<ImageCreateWithoutVendorInput>, Enumerable<ImageUncheckedCreateWithoutVendorInput>>
-    connectOrCreate?: Enumerable<ImageCreateOrConnectWithoutVendorInput>
-    upsert?: Enumerable<ImageUpsertWithWhereUniqueWithoutVendorInput>
-    createMany?: ImageCreateManyVendorInputEnvelope
-    set?: Enumerable<ImageWhereUniqueInput>
-    disconnect?: Enumerable<ImageWhereUniqueInput>
-    delete?: Enumerable<ImageWhereUniqueInput>
-    connect?: Enumerable<ImageWhereUniqueInput>
-    update?: Enumerable<ImageUpdateWithWhereUniqueWithoutVendorInput>
-    updateMany?: Enumerable<ImageUpdateManyWithWhereWithoutVendorInput>
-    deleteMany?: Enumerable<ImageScalarWhereInput>
+  export type VendorImageUncheckedUpdateManyWithoutVendorNestedInput = {
+    create?: XOR<Enumerable<VendorImageCreateWithoutVendorInput>, Enumerable<VendorImageUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<VendorImageCreateOrConnectWithoutVendorInput>
+    upsert?: Enumerable<VendorImageUpsertWithWhereUniqueWithoutVendorInput>
+    createMany?: VendorImageCreateManyVendorInputEnvelope
+    set?: Enumerable<VendorImageWhereUniqueInput>
+    disconnect?: Enumerable<VendorImageWhereUniqueInput>
+    delete?: Enumerable<VendorImageWhereUniqueInput>
+    connect?: Enumerable<VendorImageWhereUniqueInput>
+    update?: Enumerable<VendorImageUpdateWithWhereUniqueWithoutVendorInput>
+    updateMany?: Enumerable<VendorImageUpdateManyWithWhereWithoutVendorInput>
+    deleteMany?: Enumerable<VendorImageScalarWhereInput>
+  }
+
+  export type MealUncheckedUpdateManyWithoutVendorNestedInput = {
+    create?: XOR<Enumerable<MealCreateWithoutVendorInput>, Enumerable<MealUncheckedCreateWithoutVendorInput>>
+    connectOrCreate?: Enumerable<MealCreateOrConnectWithoutVendorInput>
+    upsert?: Enumerable<MealUpsertWithWhereUniqueWithoutVendorInput>
+    createMany?: MealCreateManyVendorInputEnvelope
+    set?: Enumerable<MealWhereUniqueInput>
+    disconnect?: Enumerable<MealWhereUniqueInput>
+    delete?: Enumerable<MealWhereUniqueInput>
+    connect?: Enumerable<MealWhereUniqueInput>
+    update?: Enumerable<MealUpdateWithWhereUniqueWithoutVendorInput>
+    updateMany?: Enumerable<MealUpdateManyWithWhereWithoutVendorInput>
+    deleteMany?: Enumerable<MealScalarWhereInput>
+  }
+
+  export type MealImageCreateNestedManyWithoutMealInput = {
+    create?: XOR<Enumerable<MealImageCreateWithoutMealInput>, Enumerable<MealImageUncheckedCreateWithoutMealInput>>
+    connectOrCreate?: Enumerable<MealImageCreateOrConnectWithoutMealInput>
+    createMany?: MealImageCreateManyMealInputEnvelope
+    connect?: Enumerable<MealImageWhereUniqueInput>
+  }
+
+  export type VendorCreateNestedOneWithoutMealsInput = {
+    create?: XOR<VendorCreateWithoutMealsInput, VendorUncheckedCreateWithoutMealsInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutMealsInput
+    connect?: VendorWhereUniqueInput
+  }
+
+  export type MealImageUncheckedCreateNestedManyWithoutMealInput = {
+    create?: XOR<Enumerable<MealImageCreateWithoutMealInput>, Enumerable<MealImageUncheckedCreateWithoutMealInput>>
+    connectOrCreate?: Enumerable<MealImageCreateOrConnectWithoutMealInput>
+    createMany?: MealImageCreateManyMealInputEnvelope
+    connect?: Enumerable<MealImageWhereUniqueInput>
+  }
+
+  export type EnumFoodCategoryFieldUpdateOperationsInput = {
+    set?: FoodCategory
+  }
+
+  export type EnumFoodTypeFieldUpdateOperationsInput = {
+    set?: FoodType
+  }
+
+  export type MealImageUpdateManyWithoutMealNestedInput = {
+    create?: XOR<Enumerable<MealImageCreateWithoutMealInput>, Enumerable<MealImageUncheckedCreateWithoutMealInput>>
+    connectOrCreate?: Enumerable<MealImageCreateOrConnectWithoutMealInput>
+    upsert?: Enumerable<MealImageUpsertWithWhereUniqueWithoutMealInput>
+    createMany?: MealImageCreateManyMealInputEnvelope
+    set?: Enumerable<MealImageWhereUniqueInput>
+    disconnect?: Enumerable<MealImageWhereUniqueInput>
+    delete?: Enumerable<MealImageWhereUniqueInput>
+    connect?: Enumerable<MealImageWhereUniqueInput>
+    update?: Enumerable<MealImageUpdateWithWhereUniqueWithoutMealInput>
+    updateMany?: Enumerable<MealImageUpdateManyWithWhereWithoutMealInput>
+    deleteMany?: Enumerable<MealImageScalarWhereInput>
+  }
+
+  export type VendorUpdateOneRequiredWithoutMealsNestedInput = {
+    create?: XOR<VendorCreateWithoutMealsInput, VendorUncheckedCreateWithoutMealsInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutMealsInput
+    upsert?: VendorUpsertWithoutMealsInput
+    connect?: VendorWhereUniqueInput
+    update?: XOR<VendorUpdateWithoutMealsInput, VendorUncheckedUpdateWithoutMealsInput>
+  }
+
+  export type MealImageUncheckedUpdateManyWithoutMealNestedInput = {
+    create?: XOR<Enumerable<MealImageCreateWithoutMealInput>, Enumerable<MealImageUncheckedCreateWithoutMealInput>>
+    connectOrCreate?: Enumerable<MealImageCreateOrConnectWithoutMealInput>
+    upsert?: Enumerable<MealImageUpsertWithWhereUniqueWithoutMealInput>
+    createMany?: MealImageCreateManyMealInputEnvelope
+    set?: Enumerable<MealImageWhereUniqueInput>
+    disconnect?: Enumerable<MealImageWhereUniqueInput>
+    delete?: Enumerable<MealImageWhereUniqueInput>
+    connect?: Enumerable<MealImageWhereUniqueInput>
+    update?: Enumerable<MealImageUpdateWithWhereUniqueWithoutMealInput>
+    updateMany?: Enumerable<MealImageUpdateManyWithWhereWithoutMealInput>
+    deleteMany?: Enumerable<MealImageScalarWhereInput>
   }
 
   export type VendorCreateNestedOneWithoutCoverImagesInput = {
@@ -3565,6 +6166,28 @@ export namespace Prisma {
     upsert?: VendorUpsertWithoutCoverImagesInput
     connect?: VendorWhereUniqueInput
     update?: XOR<VendorUpdateWithoutCoverImagesInput, VendorUncheckedUpdateWithoutCoverImagesInput>
+  }
+
+  export type MealCreateNestedOneWithoutImagesInput = {
+    create?: XOR<MealCreateWithoutImagesInput, MealUncheckedCreateWithoutImagesInput>
+    connectOrCreate?: MealCreateOrConnectWithoutImagesInput
+    connect?: MealWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type MealUpdateOneRequiredWithoutImagesNestedInput = {
+    create?: XOR<MealCreateWithoutImagesInput, MealUncheckedCreateWithoutImagesInput>
+    connectOrCreate?: MealCreateOrConnectWithoutImagesInput
+    upsert?: MealUpsertWithoutImagesInput
+    connect?: MealWhereUniqueInput
+    update?: XOR<MealUpdateWithoutImagesInput, MealUncheckedUpdateWithoutImagesInput>
   }
 
   export type NestedIntFilter = {
@@ -3716,51 +6339,279 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter
   }
 
-  export type ImageCreateWithoutVendorInput = {
+  export type NestedEnumFoodCategoryFilter = {
+    equals?: FoodCategory
+    in?: Enumerable<FoodCategory>
+    notIn?: Enumerable<FoodCategory>
+    not?: NestedEnumFoodCategoryFilter | FoodCategory
+  }
+
+  export type NestedEnumFoodTypeFilter = {
+    equals?: FoodType
+    in?: Enumerable<FoodType>
+    notIn?: Enumerable<FoodType>
+    not?: NestedEnumFoodTypeFilter | FoodType
+  }
+
+  export type NestedEnumFoodCategoryWithAggregatesFilter = {
+    equals?: FoodCategory
+    in?: Enumerable<FoodCategory>
+    notIn?: Enumerable<FoodCategory>
+    not?: NestedEnumFoodCategoryWithAggregatesFilter | FoodCategory
+    _count?: NestedIntFilter
+    _min?: NestedEnumFoodCategoryFilter
+    _max?: NestedEnumFoodCategoryFilter
+  }
+
+  export type NestedEnumFoodTypeWithAggregatesFilter = {
+    equals?: FoodType
+    in?: Enumerable<FoodType>
+    notIn?: Enumerable<FoodType>
+    not?: NestedEnumFoodTypeWithAggregatesFilter | FoodType
+    _count?: NestedIntFilter
+    _min?: NestedEnumFoodTypeFilter
+    _max?: NestedEnumFoodTypeFilter
+  }
+
+  export type NestedFloatWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedFloatFilter
+    _min?: NestedFloatFilter
+    _max?: NestedFloatFilter
+  }
+
+  export type VendorImageCreateWithoutVendorInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ImageUncheckedCreateWithoutVendorInput = {
+  export type VendorImageUncheckedCreateWithoutVendorInput = {
     id?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ImageCreateOrConnectWithoutVendorInput = {
-    where: ImageWhereUniqueInput
-    create: XOR<ImageCreateWithoutVendorInput, ImageUncheckedCreateWithoutVendorInput>
+  export type VendorImageCreateOrConnectWithoutVendorInput = {
+    where: VendorImageWhereUniqueInput
+    create: XOR<VendorImageCreateWithoutVendorInput, VendorImageUncheckedCreateWithoutVendorInput>
   }
 
-  export type ImageCreateManyVendorInputEnvelope = {
-    data: Enumerable<ImageCreateManyVendorInput>
+  export type VendorImageCreateManyVendorInputEnvelope = {
+    data: Enumerable<VendorImageCreateManyVendorInput>
     skipDuplicates?: boolean
   }
 
-  export type ImageUpsertWithWhereUniqueWithoutVendorInput = {
-    where: ImageWhereUniqueInput
-    update: XOR<ImageUpdateWithoutVendorInput, ImageUncheckedUpdateWithoutVendorInput>
-    create: XOR<ImageCreateWithoutVendorInput, ImageUncheckedCreateWithoutVendorInput>
+  export type MealCreateWithoutVendorInput = {
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+    images?: MealImageCreateNestedManyWithoutMealInput
   }
 
-  export type ImageUpdateWithWhereUniqueWithoutVendorInput = {
-    where: ImageWhereUniqueInput
-    data: XOR<ImageUpdateWithoutVendorInput, ImageUncheckedUpdateWithoutVendorInput>
+  export type MealUncheckedCreateWithoutVendorInput = {
+    id?: number
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+    images?: MealImageUncheckedCreateNestedManyWithoutMealInput
   }
 
-  export type ImageUpdateManyWithWhereWithoutVendorInput = {
-    where: ImageScalarWhereInput
-    data: XOR<ImageUpdateManyMutationInput, ImageUncheckedUpdateManyWithoutCoverImagesInput>
+  export type MealCreateOrConnectWithoutVendorInput = {
+    where: MealWhereUniqueInput
+    create: XOR<MealCreateWithoutVendorInput, MealUncheckedCreateWithoutVendorInput>
   }
 
-  export type ImageScalarWhereInput = {
-    AND?: Enumerable<ImageScalarWhereInput>
-    OR?: Enumerable<ImageScalarWhereInput>
-    NOT?: Enumerable<ImageScalarWhereInput>
+  export type MealCreateManyVendorInputEnvelope = {
+    data: Enumerable<MealCreateManyVendorInput>
+    skipDuplicates?: boolean
+  }
+
+  export type VendorImageUpsertWithWhereUniqueWithoutVendorInput = {
+    where: VendorImageWhereUniqueInput
+    update: XOR<VendorImageUpdateWithoutVendorInput, VendorImageUncheckedUpdateWithoutVendorInput>
+    create: XOR<VendorImageCreateWithoutVendorInput, VendorImageUncheckedCreateWithoutVendorInput>
+  }
+
+  export type VendorImageUpdateWithWhereUniqueWithoutVendorInput = {
+    where: VendorImageWhereUniqueInput
+    data: XOR<VendorImageUpdateWithoutVendorInput, VendorImageUncheckedUpdateWithoutVendorInput>
+  }
+
+  export type VendorImageUpdateManyWithWhereWithoutVendorInput = {
+    where: VendorImageScalarWhereInput
+    data: XOR<VendorImageUpdateManyMutationInput, VendorImageUncheckedUpdateManyWithoutCoverImagesInput>
+  }
+
+  export type VendorImageScalarWhereInput = {
+    AND?: Enumerable<VendorImageScalarWhereInput>
+    OR?: Enumerable<VendorImageScalarWhereInput>
+    NOT?: Enumerable<VendorImageScalarWhereInput>
     id?: IntFilter | number
     vendorId?: IntFilter | number
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
+  }
+
+  export type MealUpsertWithWhereUniqueWithoutVendorInput = {
+    where: MealWhereUniqueInput
+    update: XOR<MealUpdateWithoutVendorInput, MealUncheckedUpdateWithoutVendorInput>
+    create: XOR<MealCreateWithoutVendorInput, MealUncheckedCreateWithoutVendorInput>
+  }
+
+  export type MealUpdateWithWhereUniqueWithoutVendorInput = {
+    where: MealWhereUniqueInput
+    data: XOR<MealUpdateWithoutVendorInput, MealUncheckedUpdateWithoutVendorInput>
+  }
+
+  export type MealUpdateManyWithWhereWithoutVendorInput = {
+    where: MealScalarWhereInput
+    data: XOR<MealUpdateManyMutationInput, MealUncheckedUpdateManyWithoutMealsInput>
+  }
+
+  export type MealScalarWhereInput = {
+    AND?: Enumerable<MealScalarWhereInput>
+    OR?: Enumerable<MealScalarWhereInput>
+    NOT?: Enumerable<MealScalarWhereInput>
+    id?: IntFilter | number
+    mealName?: StringFilter | string
+    rating?: IntFilter | number
+    timeToBeReady?: DateTimeFilter | Date | string
+    category?: EnumFoodCategoryFilter | FoodCategory
+    type?: EnumFoodTypeFilter | FoodType
+    vendorId?: IntFilter | number
+  }
+
+  export type MealImageCreateWithoutMealInput = {
+    price: number
+  }
+
+  export type MealImageUncheckedCreateWithoutMealInput = {
+    id?: number
+    price: number
+  }
+
+  export type MealImageCreateOrConnectWithoutMealInput = {
+    where: MealImageWhereUniqueInput
+    create: XOR<MealImageCreateWithoutMealInput, MealImageUncheckedCreateWithoutMealInput>
+  }
+
+  export type MealImageCreateManyMealInputEnvelope = {
+    data: Enumerable<MealImageCreateManyMealInput>
+    skipDuplicates?: boolean
+  }
+
+  export type VendorCreateWithoutMealsInput = {
+    pinCode: string
+    brandName: string
+    ownerName: string
+    foodType?: VendorCreatefoodTypeInput | Enumerable<FoodType>
+    email: string
+    password: string
+    salt: string
+    phone: string
+    address?: string | null
+    isServiceAvailable?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    coverImages?: VendorImageCreateNestedManyWithoutVendorInput
+  }
+
+  export type VendorUncheckedCreateWithoutMealsInput = {
+    id?: number
+    pinCode: string
+    brandName: string
+    ownerName: string
+    foodType?: VendorCreatefoodTypeInput | Enumerable<FoodType>
+    email: string
+    password: string
+    salt: string
+    phone: string
+    address?: string | null
+    isServiceAvailable?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    coverImages?: VendorImageUncheckedCreateNestedManyWithoutVendorInput
+  }
+
+  export type VendorCreateOrConnectWithoutMealsInput = {
+    where: VendorWhereUniqueInput
+    create: XOR<VendorCreateWithoutMealsInput, VendorUncheckedCreateWithoutMealsInput>
+  }
+
+  export type MealImageUpsertWithWhereUniqueWithoutMealInput = {
+    where: MealImageWhereUniqueInput
+    update: XOR<MealImageUpdateWithoutMealInput, MealImageUncheckedUpdateWithoutMealInput>
+    create: XOR<MealImageCreateWithoutMealInput, MealImageUncheckedCreateWithoutMealInput>
+  }
+
+  export type MealImageUpdateWithWhereUniqueWithoutMealInput = {
+    where: MealImageWhereUniqueInput
+    data: XOR<MealImageUpdateWithoutMealInput, MealImageUncheckedUpdateWithoutMealInput>
+  }
+
+  export type MealImageUpdateManyWithWhereWithoutMealInput = {
+    where: MealImageScalarWhereInput
+    data: XOR<MealImageUpdateManyMutationInput, MealImageUncheckedUpdateManyWithoutImagesInput>
+  }
+
+  export type MealImageScalarWhereInput = {
+    AND?: Enumerable<MealImageScalarWhereInput>
+    OR?: Enumerable<MealImageScalarWhereInput>
+    NOT?: Enumerable<MealImageScalarWhereInput>
+    id?: IntFilter | number
+    price?: FloatFilter | number
+    mealId?: IntFilter | number
+  }
+
+  export type VendorUpsertWithoutMealsInput = {
+    update: XOR<VendorUpdateWithoutMealsInput, VendorUncheckedUpdateWithoutMealsInput>
+    create: XOR<VendorCreateWithoutMealsInput, VendorUncheckedCreateWithoutMealsInput>
+  }
+
+  export type VendorUpdateWithoutMealsInput = {
+    pinCode?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    ownerName?: StringFieldUpdateOperationsInput | string
+    foodType?: VendorUpdatefoodTypeInput | Enumerable<FoodType>
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    salt?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isServiceAvailable?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverImages?: VendorImageUpdateManyWithoutVendorNestedInput
+  }
+
+  export type VendorUncheckedUpdateWithoutMealsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    pinCode?: StringFieldUpdateOperationsInput | string
+    brandName?: StringFieldUpdateOperationsInput | string
+    ownerName?: StringFieldUpdateOperationsInput | string
+    foodType?: VendorUpdatefoodTypeInput | Enumerable<FoodType>
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    salt?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isServiceAvailable?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coverImages?: VendorImageUncheckedUpdateManyWithoutVendorNestedInput
   }
 
   export type VendorCreateWithoutCoverImagesInput = {
@@ -3776,6 +6627,7 @@ export namespace Prisma {
     isServiceAvailable?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    meals?: MealCreateNestedManyWithoutVendorInput
   }
 
   export type VendorUncheckedCreateWithoutCoverImagesInput = {
@@ -3792,6 +6644,7 @@ export namespace Prisma {
     isServiceAvailable?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    meals?: MealUncheckedCreateNestedManyWithoutVendorInput
   }
 
   export type VendorCreateOrConnectWithoutCoverImagesInput = {
@@ -3817,6 +6670,7 @@ export namespace Prisma {
     isServiceAvailable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    meals?: MealUpdateManyWithoutVendorNestedInput
   }
 
   export type VendorUncheckedUpdateWithoutCoverImagesInput = {
@@ -3833,29 +6687,134 @@ export namespace Prisma {
     isServiceAvailable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    meals?: MealUncheckedUpdateManyWithoutVendorNestedInput
   }
 
-  export type ImageCreateManyVendorInput = {
+  export type MealCreateWithoutImagesInput = {
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+    vendor: VendorCreateNestedOneWithoutMealsInput
+  }
+
+  export type MealUncheckedCreateWithoutImagesInput = {
+    id?: number
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+    vendorId: number
+  }
+
+  export type MealCreateOrConnectWithoutImagesInput = {
+    where: MealWhereUniqueInput
+    create: XOR<MealCreateWithoutImagesInput, MealUncheckedCreateWithoutImagesInput>
+  }
+
+  export type MealUpsertWithoutImagesInput = {
+    update: XOR<MealUpdateWithoutImagesInput, MealUncheckedUpdateWithoutImagesInput>
+    create: XOR<MealCreateWithoutImagesInput, MealUncheckedCreateWithoutImagesInput>
+  }
+
+  export type MealUpdateWithoutImagesInput = {
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+    vendor?: VendorUpdateOneRequiredWithoutMealsNestedInput
+  }
+
+  export type MealUncheckedUpdateWithoutImagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+    vendorId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type VendorImageCreateManyVendorInput = {
     id?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ImageUpdateWithoutVendorInput = {
+  export type MealCreateManyVendorInput = {
+    id?: number
+    mealName: string
+    rating: number
+    timeToBeReady?: Date | string
+    category: FoodCategory
+    type: FoodType
+  }
+
+  export type VendorImageUpdateWithoutVendorInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ImageUncheckedUpdateWithoutVendorInput = {
+  export type VendorImageUncheckedUpdateWithoutVendorInput = {
     id?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ImageUncheckedUpdateManyWithoutCoverImagesInput = {
+  export type VendorImageUncheckedUpdateManyWithoutCoverImagesInput = {
     id?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MealUpdateWithoutVendorInput = {
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+    images?: MealImageUpdateManyWithoutMealNestedInput
+  }
+
+  export type MealUncheckedUpdateWithoutVendorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+    images?: MealImageUncheckedUpdateManyWithoutMealNestedInput
+  }
+
+  export type MealUncheckedUpdateManyWithoutMealsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealName?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    timeToBeReady?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumFoodCategoryFieldUpdateOperationsInput | FoodCategory
+    type?: EnumFoodTypeFieldUpdateOperationsInput | FoodType
+  }
+
+  export type MealImageCreateManyMealInput = {
+    id?: number
+    price: number
+  }
+
+  export type MealImageUpdateWithoutMealInput = {
+    price?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type MealImageUncheckedUpdateWithoutMealInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type MealImageUncheckedUpdateManyWithoutImagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    price?: FloatFieldUpdateOperationsInput | number
   }
 
 

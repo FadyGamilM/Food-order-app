@@ -12,35 +12,67 @@ datasource db {
 }
 
 model Vendor {
-  // pk
+  //* pk
   id                 Int        @id @default(autoincrement())
   pinCode            String
   brandName          String
   ownerName          String
-  foodType           FoodType[] @default([])
+  foodType           FoodType[]
   email              String     @unique
   password           String
   salt               String
   phone              String
   address            String?
   isServiceAvailable Boolean?   @default(true)
-  coverImages        Image[]
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
+
+  //* each vendor has one or more cover images
+  coverImages VendorImage[]
+
+  //* vendor can servce many meals 
+  meals Meal[]
 }
 
-model Image {
+model Meal {
+  id            Int          @id @default(autoincrement())
+  mealName      String
+  rating        Int
+  timeToBeReady DateTime     @default(now())
+  category      FoodCategory
+  type          FoodType
+
+  //* each meal has one or more image
+  images MealImage[]
+
+  vendor   Vendor @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vendorId Int
+}
+
+model VendorImage {
   id        Int      @id @default(autoincrement())
-  Vendor    Vendor   @relation(fields: [vendorId], references: [id])
+  // vendor can has many cover images
+  Vendor    Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   vendorId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model MealImage {
+  id     Int   @id @default(autoincrement())
+  price  Float
+  //* one mael can has many images 
+  meal   Meal  @relation(fields: [mealId], onDelete: Cascade, references: [id], onUpdate: Cascade)
+  mealId Int
+}
+
 enum FoodType {
-  SNACKS
-  DESSERTS
-  FRUITS
-  VEGETABLES
-  MEAT
+  VEG
+  NON_VEG
+}
+
+enum FoodCategory {
+  BREAKFAST
+  LAUNCH
+  DINNER
 }

@@ -3,6 +3,7 @@ import { db } from "./prisma.service";
 import { createVendorDto } from "../dtos";
 import { Log } from "../utility/ConsoleLogger";
 import { EncryptPassword, generateSlat } from "../utility/PasswordEncryption";
+import { FoodType } from "../../prisma/client";
 
 //! => create new vendor
 export const createVendor = async (vendorDto: createVendorDto) =>
@@ -10,6 +11,9 @@ export const createVendor = async (vendorDto: createVendorDto) =>
    try {
       const generatedSalt: string = await generateSlat();
       const encryptedPass: string = await EncryptPassword(vendorDto.password, generatedSalt);
+
+      //* convert the foodTypes provided by the clients via the dto into the enum type generated via prisma client 
+      let foodTypes = vendorDto.foodType.map(type => FoodType[type as keyof typeof FoodType]);
 
       let newVendor = await db.vendor.create({
          data: {
@@ -22,7 +26,7 @@ export const createVendor = async (vendorDto: createVendorDto) =>
             pinCode: vendorDto.pinCode,
             isServiceAvailable: vendorDto.isServiceAvailable,
             address: vendorDto.address,
-            foodType: vendorDto.foodType,
+            foodType: foodTypes,
          }
       });
       return newVendor;
