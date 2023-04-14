@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { loginDto } from "../dtos/vendor/loginDto";
-import { Login } from "../services/vendor.service";
+import { Login, GetVendorById } from "../services/vendor.service";
+import { getVendorDto } from "../dtos/vendor/getVendorDto";
+
 export const LoginController = async (req: Request, res: Response, next: NextFunction) =>
 {
    // extract the request body
@@ -14,7 +16,23 @@ export const LoginController = async (req: Request, res: Response, next: NextFun
 };
 
 // for authorization 
-export const getVendorProfile = async (req: Request, res: Response, next: NextFunction) => { };
+export const getVendorProfile = async (req: Request, res: Response, next: NextFunction) =>
+{
+   //* extract the authorized user from the headers
+   const authorizedUserPayload = req.user;
+
+   //* call the service business logic to extract this user from db 
+   if (authorizedUserPayload?.id === undefined) {
+      return res.status(403).json({
+         "error": "vendor is not authorized"
+      });
+   }
+   const existingVendor = await GetVendorById(authorizedUserPayload?.id);
+
+   //* return the response
+
+   if (existingVendor) return res.status(200).json({ "data": existingVendor });
+};
 
 // vendor can update his/her profile only
 export const UpdateVendorProfile = async (req: Request, res: Response, next: NextFunction) => { };

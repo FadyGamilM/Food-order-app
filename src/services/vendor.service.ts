@@ -24,6 +24,8 @@ export const Login = async (loginRequest: loginDto) =>
          ownerName: existingVendor.ownerName,
          foodType: existingVendor.foodType
       };
+
+      // generaet a signature based on this payload (simply hash the data of this user)
       const signature: string = await GenerateSignature(payload);
 
       // return the result to the controller
@@ -35,4 +37,14 @@ export const Login = async (loginRequest: loginDto) =>
    finally {
       await db.$disconnect();
    }
+};
+
+export const GetVendorById = async (vendorId: number) =>
+{
+   // get the vendor from db
+   const existingVendor = await db.vendor.findUnique({
+      where: { id: vendorId }
+   });
+   // return the result
+   return existingVendor;
 };

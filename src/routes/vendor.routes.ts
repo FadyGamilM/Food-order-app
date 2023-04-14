@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { LoginController, UpdateVendorProfile, getVendorProfile, updateVendorServices } from "../controllers";
+import { Authorize } from "../middlewares";
 
 const router: Router = Router();
 
@@ -7,13 +8,13 @@ const router: Router = Router();
 router.post("/login", LoginController);
 
 //* get the vendor profile info for authorization staff
-router.get("/profile", getVendorProfile);
+router.get("/profile", Authorize, getVendorProfile);
 
 //* update the vendor profile
-router.patch("/profile", UpdateVendorProfile);
+router.patch("/profile", Authorize, UpdateVendorProfile);
 
 //* update vendor's provided services
-router.post("/services", updateVendorServices);
+router.post("/services", Authorize, updateVendorServices);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) =>
 {
