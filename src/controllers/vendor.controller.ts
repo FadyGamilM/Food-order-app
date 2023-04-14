@@ -9,13 +9,13 @@ import { Vendor } from "../../prisma/client";
 //! => Login Controller 
 export const LoginController = async (req: Request, res: Response, next: NextFunction) =>
 {
-   // extract the request body
+   //* extract the request body
    let loginRequest: loginDto = <loginDto>req.body;
 
-   // call the service for business logic processing 
+   //* call the service for business logic processing 
    let result = await Login(loginRequest);
 
-   // return the response
+   //* return the response
    return res.status(200).json({ "data": result });
 };
 
@@ -52,14 +52,9 @@ export const UpdateVendorProfileController = async (req: Request, res: Response,
       });
    }
 
-   //* call the service business logic to extract this user from db 
-   const existingVendor = await GetVendorById(authorizedVendorPayload?.id);
-
-   //* if this vendor is not the profile's owner
-   if (!existingVendor) return res.status(403).json({ "error": "user is not authorized" });
-
    //* extract the updated vendor profile from the body of the request to persist the new updates
-   let updatedProfile: updateVendorProfile = <updateVendorProfile>req.body;
+   let updatedProfile: updateVendorProfile = <updateVendorProfile>req.body.updatedProfile;
+
 
    //* call the service business logic to update this profile with the new updates
    let response = await UpdateVendorProfile(updatedProfile, authorizedVendorPayload.id);

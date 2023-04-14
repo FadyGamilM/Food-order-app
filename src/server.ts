@@ -7,11 +7,11 @@ const server = express();
 
 server.use(express.json());
 
-// use our custom routes
+//* use our custom routes
 server.use("/api/admin", AdminRouter);
 server.use("/api/vendors", VendorRoutes);
 
-// in case of 404 not found page
+//* in case of 404 not found page
 server.use((req: Request, res: Response, next: NextFunction) =>
 {
    Log("404 Error Router !!!");

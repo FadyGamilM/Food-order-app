@@ -2,7 +2,7 @@ type createVendorDto = {
    pinCode: string;
    brandName: string;
    ownerName: string;
-   foodType: [];
+   foodType: [string];
    email: string;
    password: string;
    phone: string;

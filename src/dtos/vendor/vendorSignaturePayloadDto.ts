@@ -1,7 +1,7 @@
 type vendorSignaturePayloadDto = {
    id: number;
    email: string;
-   foodType: Array<string>;
+   foodType: [string];
    brandName: string;
    ownerName: string;
 };

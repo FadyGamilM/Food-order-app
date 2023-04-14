@@ -25,7 +25,7 @@ export const Login = async (loginRequest: loginDto) =>
          brandName: existingVendor.brandName,
          email: existingVendor.email,
          ownerName: existingVendor.ownerName,
-         foodType: existingVendor.foodType
+         foodType: <[string]>(existingVendor.foodType)
       };
 
       // generaet a signature based on this payload (simply hash the data of this user)
@@ -54,11 +54,14 @@ export const GetVendorById = async (vendorId: number) =>
 
 export const UpdateVendorProfile = async (updatedProfile: updateVendorProfile, authorizedVendorId: number) =>
 {
-
+   //* extract the profile to be updated from the database to update it 
    const oldVendor = await db.vendor.findUnique({ where: { id: authorizedVendorId } });
+
+   //* check if there is any profile with this id
    if (oldVendor === null) return null;
 
-   // update the vendor
+
+   //* update the vendor
    const updated = await db.vendor.update({
       where: {
          id: authorizedVendorId
@@ -72,9 +75,7 @@ export const UpdateVendorProfile = async (updatedProfile: updateVendorProfile, a
          isServiceAvailable: (updatedProfile.isServiceAvailable !== undefined && updatedProfile.isServiceAvailable !== null) ? updatedProfile.isServiceAvailable : oldVendor.isServiceAvailable,
       }
    });
-
    return updated;
-
 };
 
 
