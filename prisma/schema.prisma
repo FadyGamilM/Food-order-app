@@ -46,8 +46,34 @@ model Meal {
   //* each meal has one or more image
   images MealImage[]
 
+  //* each vendor has one or more meals
   vendor   Vendor @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   vendorId Int
+}
+
+model Order {
+  id          Int      @id @default(autoincrement())
+  code        Int      @unique
+  orderStatus Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  totalPrice  Float
+
+  // an order is orderd by only one customer, and it must be related to a customer or there is no order in my db
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // order has one or more meals
+  orderedMeal OrderedMeal[]
+}
+
+model OrderedMeal {
+  id     Int @id @default(autoincrement())
+  mealId Int @unique
+  units  Int @default(1)
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Customer {
@@ -60,6 +86,8 @@ model Customer {
   otp_expiry BigInt // i will store the milleseconds here and conert it to Date using new Date().setTime(otp_expiry) method in my service logic
   phone      String
   isVerified Boolean @default(false)
+  //* customer can create many orders 
+  order      Order[]
 }
 
 model VendorImage {

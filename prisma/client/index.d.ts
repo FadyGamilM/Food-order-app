@@ -48,6 +48,31 @@ export type Meal = {
 }
 
 /**
+ * Model Order
+ * 
+ */
+export type Order = {
+  id: number
+  code: number
+  orderStatus: boolean
+  createdAt: Date
+  updatedAt: Date
+  totalPrice: number
+  customerId: number
+}
+
+/**
+ * Model OrderedMeal
+ * 
+ */
+export type OrderedMeal = {
+  id: number
+  mealId: number
+  units: number
+  orderId: number
+}
+
+/**
  * Model Customer
  * 
  */
@@ -245,6 +270,26 @@ export class PrismaClient<
     * ```
     */
   get meal(): Prisma.MealDelegate<GlobalReject>;
+
+  /**
+   * `prisma.order`: Exposes CRUD operations for the **Order** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Orders
+    * const orders = await prisma.order.findMany()
+    * ```
+    */
+  get order(): Prisma.OrderDelegate<GlobalReject>;
+
+  /**
+   * `prisma.orderedMeal`: Exposes CRUD operations for the **OrderedMeal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrderedMeals
+    * const orderedMeals = await prisma.orderedMeal.findMany()
+    * ```
+    */
+  get orderedMeal(): Prisma.OrderedMealDelegate<GlobalReject>;
 
   /**
    * `prisma.customer`: Exposes CRUD operations for the **Customer** model.
@@ -746,6 +791,8 @@ export namespace Prisma {
   export const ModelName: {
     Vendor: 'Vendor',
     Meal: 'Meal',
+    Order: 'Order',
+    OrderedMeal: 'OrderedMeal',
     Customer: 'Customer',
     VendorImage: 'VendorImage',
     MealImage: 'MealImage'
@@ -993,6 +1040,92 @@ export namespace Prisma {
      * Select specific fields to fetch from the MealCountOutputType
      */
     select?: MealCountOutputTypeSelect | null
+  }
+
+
+
+  /**
+   * Count Type OrderCountOutputType
+   */
+
+
+  export type OrderCountOutputType = {
+    orderedMeal: number
+  }
+
+  export type OrderCountOutputTypeSelect = {
+    orderedMeal?: boolean
+  }
+
+  export type OrderCountOutputTypeGetPayload<S extends boolean | null | undefined | OrderCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? OrderCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (OrderCountOutputTypeArgs)
+    ? OrderCountOutputType 
+    : S extends { select: any } & (OrderCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof OrderCountOutputType ? OrderCountOutputType[P] : never
+  } 
+      : OrderCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * OrderCountOutputType without action
+   */
+  export type OrderCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the OrderCountOutputType
+     */
+    select?: OrderCountOutputTypeSelect | null
+  }
+
+
+
+  /**
+   * Count Type CustomerCountOutputType
+   */
+
+
+  export type CustomerCountOutputType = {
+    order: number
+  }
+
+  export type CustomerCountOutputTypeSelect = {
+    order?: boolean
+  }
+
+  export type CustomerCountOutputTypeGetPayload<S extends boolean | null | undefined | CustomerCountOutputTypeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? CustomerCountOutputType :
+    S extends undefined ? never :
+    S extends { include: any } & (CustomerCountOutputTypeArgs)
+    ? CustomerCountOutputType 
+    : S extends { select: any } & (CustomerCountOutputTypeArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof CustomerCountOutputType ? CustomerCountOutputType[P] : never
+  } 
+      : CustomerCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * CustomerCountOutputType without action
+   */
+  export type CustomerCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the CustomerCountOutputType
+     */
+    select?: CustomerCountOutputTypeSelect | null
   }
 
 
@@ -3115,6 +3248,1999 @@ export namespace Prisma {
 
 
   /**
+   * Model Order
+   */
+
+
+  export type AggregateOrder = {
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  export type OrderAvgAggregateOutputType = {
+    id: number | null
+    code: number | null
+    totalPrice: number | null
+    customerId: number | null
+  }
+
+  export type OrderSumAggregateOutputType = {
+    id: number | null
+    code: number | null
+    totalPrice: number | null
+    customerId: number | null
+  }
+
+  export type OrderMinAggregateOutputType = {
+    id: number | null
+    code: number | null
+    orderStatus: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    totalPrice: number | null
+    customerId: number | null
+  }
+
+  export type OrderMaxAggregateOutputType = {
+    id: number | null
+    code: number | null
+    orderStatus: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    totalPrice: number | null
+    customerId: number | null
+  }
+
+  export type OrderCountAggregateOutputType = {
+    id: number
+    code: number
+    orderStatus: number
+    createdAt: number
+    updatedAt: number
+    totalPrice: number
+    customerId: number
+    _all: number
+  }
+
+
+  export type OrderAvgAggregateInputType = {
+    id?: true
+    code?: true
+    totalPrice?: true
+    customerId?: true
+  }
+
+  export type OrderSumAggregateInputType = {
+    id?: true
+    code?: true
+    totalPrice?: true
+    customerId?: true
+  }
+
+  export type OrderMinAggregateInputType = {
+    id?: true
+    code?: true
+    orderStatus?: true
+    createdAt?: true
+    updatedAt?: true
+    totalPrice?: true
+    customerId?: true
+  }
+
+  export type OrderMaxAggregateInputType = {
+    id?: true
+    code?: true
+    orderStatus?: true
+    createdAt?: true
+    updatedAt?: true
+    totalPrice?: true
+    customerId?: true
+  }
+
+  export type OrderCountAggregateInputType = {
+    id?: true
+    code?: true
+    orderStatus?: true
+    createdAt?: true
+    updatedAt?: true
+    totalPrice?: true
+    customerId?: true
+    _all?: true
+  }
+
+  export type OrderAggregateArgs = {
+    /**
+     * Filter which Order to aggregate.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: Enumerable<OrderOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Orders
+    **/
+    _count?: true | OrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderMaxAggregateInputType
+  }
+
+  export type GetOrderAggregateType<T extends OrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrder[P]>
+      : GetScalarType<T[P], AggregateOrder[P]>
+  }
+
+
+
+
+  export type OrderGroupByArgs = {
+    where?: OrderWhereInput
+    orderBy?: Enumerable<OrderOrderByWithAggregationInput>
+    by: OrderScalarFieldEnum[]
+    having?: OrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderCountAggregateInputType | true
+    _avg?: OrderAvgAggregateInputType
+    _sum?: OrderSumAggregateInputType
+    _min?: OrderMinAggregateInputType
+    _max?: OrderMaxAggregateInputType
+  }
+
+
+  export type OrderGroupByOutputType = {
+    id: number
+    code: number
+    orderStatus: boolean
+    createdAt: Date
+    updatedAt: Date
+    totalPrice: number
+    customerId: number
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  type GetOrderGroupByPayload<T extends OrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<OrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderSelect = {
+    id?: boolean
+    code?: boolean
+    orderStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    totalPrice?: boolean
+    customerId?: boolean
+    customer?: boolean | CustomerArgs
+    orderedMeal?: boolean | Order$orderedMealArgs
+    _count?: boolean | OrderCountOutputTypeArgs
+  }
+
+
+  export type OrderInclude = {
+    customer?: boolean | CustomerArgs
+    orderedMeal?: boolean | Order$orderedMealArgs
+    _count?: boolean | OrderCountOutputTypeArgs
+  }
+
+  export type OrderGetPayload<S extends boolean | null | undefined | OrderArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? Order :
+    S extends undefined ? never :
+    S extends { include: any } & (OrderArgs | OrderFindManyArgs)
+    ? Order  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'customer' ? CustomerGetPayload<S['include'][P]> :
+        P extends 'orderedMeal' ? Array < OrderedMealGetPayload<S['include'][P]>>  :
+        P extends '_count' ? OrderCountOutputTypeGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (OrderArgs | OrderFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'customer' ? CustomerGetPayload<S['select'][P]> :
+        P extends 'orderedMeal' ? Array < OrderedMealGetPayload<S['select'][P]>>  :
+        P extends '_count' ? OrderCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Order ? Order[P] : never
+  } 
+      : Order
+
+
+  type OrderCountArgs = 
+    Omit<OrderFindManyArgs, 'select' | 'include'> & {
+      select?: OrderCountAggregateInputType | true
+    }
+
+  export interface OrderDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one Order that matches the filter.
+     * @param {OrderFindUniqueArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends OrderFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, OrderFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Order'> extends True ? Prisma__OrderClient<OrderGetPayload<T>> : Prisma__OrderClient<OrderGetPayload<T> | null, null>
+
+    /**
+     * Find one Order that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {OrderFindUniqueOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends OrderFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, OrderFindUniqueOrThrowArgs>
+    ): Prisma__OrderClient<OrderGetPayload<T>>
+
+    /**
+     * Find the first Order that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends OrderFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, OrderFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Order'> extends True ? Prisma__OrderClient<OrderGetPayload<T>> : Prisma__OrderClient<OrderGetPayload<T> | null, null>
+
+    /**
+     * Find the first Order that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends OrderFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, OrderFindFirstOrThrowArgs>
+    ): Prisma__OrderClient<OrderGetPayload<T>>
+
+    /**
+     * Find zero or more Orders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Orders
+     * const orders = await prisma.order.findMany()
+     * 
+     * // Get first 10 Orders
+     * const orders = await prisma.order.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderWithIdOnly = await prisma.order.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends OrderFindManyArgs>(
+      args?: SelectSubset<T, OrderFindManyArgs>
+    ): Prisma.PrismaPromise<Array<OrderGetPayload<T>>>
+
+    /**
+     * Create a Order.
+     * @param {OrderCreateArgs} args - Arguments to create a Order.
+     * @example
+     * // Create one Order
+     * const Order = await prisma.order.create({
+     *   data: {
+     *     // ... data to create a Order
+     *   }
+     * })
+     * 
+    **/
+    create<T extends OrderCreateArgs>(
+      args: SelectSubset<T, OrderCreateArgs>
+    ): Prisma__OrderClient<OrderGetPayload<T>>
+
+    /**
+     * Create many Orders.
+     *     @param {OrderCreateManyArgs} args - Arguments to create many Orders.
+     *     @example
+     *     // Create many Orders
+     *     const order = await prisma.order.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends OrderCreateManyArgs>(
+      args?: SelectSubset<T, OrderCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Order.
+     * @param {OrderDeleteArgs} args - Arguments to delete one Order.
+     * @example
+     * // Delete one Order
+     * const Order = await prisma.order.delete({
+     *   where: {
+     *     // ... filter to delete one Order
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends OrderDeleteArgs>(
+      args: SelectSubset<T, OrderDeleteArgs>
+    ): Prisma__OrderClient<OrderGetPayload<T>>
+
+    /**
+     * Update one Order.
+     * @param {OrderUpdateArgs} args - Arguments to update one Order.
+     * @example
+     * // Update one Order
+     * const order = await prisma.order.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends OrderUpdateArgs>(
+      args: SelectSubset<T, OrderUpdateArgs>
+    ): Prisma__OrderClient<OrderGetPayload<T>>
+
+    /**
+     * Delete zero or more Orders.
+     * @param {OrderDeleteManyArgs} args - Arguments to filter Orders to delete.
+     * @example
+     * // Delete a few Orders
+     * const { count } = await prisma.order.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends OrderDeleteManyArgs>(
+      args?: SelectSubset<T, OrderDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Orders
+     * const order = await prisma.order.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends OrderUpdateManyArgs>(
+      args: SelectSubset<T, OrderUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Order.
+     * @param {OrderUpsertArgs} args - Arguments to update or create a Order.
+     * @example
+     * // Update or create a Order
+     * const order = await prisma.order.upsert({
+     *   create: {
+     *     // ... data to create a Order
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Order we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends OrderUpsertArgs>(
+      args: SelectSubset<T, OrderUpsertArgs>
+    ): Prisma__OrderClient<OrderGetPayload<T>>
+
+    /**
+     * Count the number of Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderCountArgs} args - Arguments to filter Orders to count.
+     * @example
+     * // Count the number of Orders
+     * const count = await prisma.order.count({
+     *   where: {
+     *     // ... the filter for the Orders we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderCountArgs>(
+      args?: Subset<T, OrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderAggregateArgs>(args: Subset<T, OrderAggregateArgs>): Prisma.PrismaPromise<GetOrderAggregateType<T>>
+
+    /**
+     * Group by Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderGroupByArgs['orderBy'] }
+        : { orderBy?: OrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Order.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__OrderClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    customer<T extends CustomerArgs= {}>(args?: Subset<T, CustomerArgs>): Prisma__CustomerClient<CustomerGetPayload<T> | Null>;
+
+    orderedMeal<T extends Order$orderedMealArgs= {}>(args?: Subset<T, Order$orderedMealArgs>): Prisma.PrismaPromise<Array<OrderedMealGetPayload<T>>| Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Order base type for findUnique actions
+   */
+  export type OrderFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order findUnique
+   */
+  export interface OrderFindUniqueArgs extends OrderFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Order findUniqueOrThrow
+   */
+  export type OrderFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+
+  /**
+   * Order base type for findFirst actions
+   */
+  export type OrderFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: Enumerable<OrderOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: Enumerable<OrderScalarFieldEnum>
+  }
+
+  /**
+   * Order findFirst
+   */
+  export interface OrderFindFirstArgs extends OrderFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Order findFirstOrThrow
+   */
+  export type OrderFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: Enumerable<OrderOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: Enumerable<OrderScalarFieldEnum>
+  }
+
+
+  /**
+   * Order findMany
+   */
+  export type OrderFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * Filter, which Orders to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: Enumerable<OrderOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    distinct?: Enumerable<OrderScalarFieldEnum>
+  }
+
+
+  /**
+   * Order create
+   */
+  export type OrderCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * The data needed to create a Order.
+     */
+    data: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+  }
+
+
+  /**
+   * Order createMany
+   */
+  export type OrderCreateManyArgs = {
+    /**
+     * The data used to create many Orders.
+     */
+    data: Enumerable<OrderCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Order update
+   */
+  export type OrderUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * The data needed to update a Order.
+     */
+    data: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+    /**
+     * Choose, which Order to update.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+
+  /**
+   * Order updateMany
+   */
+  export type OrderUpdateManyArgs = {
+    /**
+     * The data used to update Orders.
+     */
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyInput>
+    /**
+     * Filter which Orders to update
+     */
+    where?: OrderWhereInput
+  }
+
+
+  /**
+   * Order upsert
+   */
+  export type OrderUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * The filter to search for the Order to update in case it exists.
+     */
+    where: OrderWhereUniqueInput
+    /**
+     * In case the Order found by the `where` argument doesn't exist, create a new Order with this data.
+     */
+    create: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+    /**
+     * In case the Order was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Order delete
+   */
+  export type OrderDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    /**
+     * Filter which Order to delete.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+
+  /**
+   * Order deleteMany
+   */
+  export type OrderDeleteManyArgs = {
+    /**
+     * Filter which Orders to delete
+     */
+    where?: OrderWhereInput
+  }
+
+
+  /**
+   * Order.orderedMeal
+   */
+  export type Order$orderedMealArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    where?: OrderedMealWhereInput
+    orderBy?: Enumerable<OrderedMealOrderByWithRelationInput>
+    cursor?: OrderedMealWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<OrderedMealScalarFieldEnum>
+  }
+
+
+  /**
+   * Order without action
+   */
+  export type OrderArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+  }
+
+
+
+  /**
+   * Model OrderedMeal
+   */
+
+
+  export type AggregateOrderedMeal = {
+    _count: OrderedMealCountAggregateOutputType | null
+    _avg: OrderedMealAvgAggregateOutputType | null
+    _sum: OrderedMealSumAggregateOutputType | null
+    _min: OrderedMealMinAggregateOutputType | null
+    _max: OrderedMealMaxAggregateOutputType | null
+  }
+
+  export type OrderedMealAvgAggregateOutputType = {
+    id: number | null
+    mealId: number | null
+    units: number | null
+    orderId: number | null
+  }
+
+  export type OrderedMealSumAggregateOutputType = {
+    id: number | null
+    mealId: number | null
+    units: number | null
+    orderId: number | null
+  }
+
+  export type OrderedMealMinAggregateOutputType = {
+    id: number | null
+    mealId: number | null
+    units: number | null
+    orderId: number | null
+  }
+
+  export type OrderedMealMaxAggregateOutputType = {
+    id: number | null
+    mealId: number | null
+    units: number | null
+    orderId: number | null
+  }
+
+  export type OrderedMealCountAggregateOutputType = {
+    id: number
+    mealId: number
+    units: number
+    orderId: number
+    _all: number
+  }
+
+
+  export type OrderedMealAvgAggregateInputType = {
+    id?: true
+    mealId?: true
+    units?: true
+    orderId?: true
+  }
+
+  export type OrderedMealSumAggregateInputType = {
+    id?: true
+    mealId?: true
+    units?: true
+    orderId?: true
+  }
+
+  export type OrderedMealMinAggregateInputType = {
+    id?: true
+    mealId?: true
+    units?: true
+    orderId?: true
+  }
+
+  export type OrderedMealMaxAggregateInputType = {
+    id?: true
+    mealId?: true
+    units?: true
+    orderId?: true
+  }
+
+  export type OrderedMealCountAggregateInputType = {
+    id?: true
+    mealId?: true
+    units?: true
+    orderId?: true
+    _all?: true
+  }
+
+  export type OrderedMealAggregateArgs = {
+    /**
+     * Filter which OrderedMeal to aggregate.
+     */
+    where?: OrderedMealWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderedMeals to fetch.
+     */
+    orderBy?: Enumerable<OrderedMealOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderedMealWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderedMeals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderedMeals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrderedMeals
+    **/
+    _count?: true | OrderedMealCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderedMealAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderedMealSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderedMealMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderedMealMaxAggregateInputType
+  }
+
+  export type GetOrderedMealAggregateType<T extends OrderedMealAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrderedMeal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrderedMeal[P]>
+      : GetScalarType<T[P], AggregateOrderedMeal[P]>
+  }
+
+
+
+
+  export type OrderedMealGroupByArgs = {
+    where?: OrderedMealWhereInput
+    orderBy?: Enumerable<OrderedMealOrderByWithAggregationInput>
+    by: OrderedMealScalarFieldEnum[]
+    having?: OrderedMealScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderedMealCountAggregateInputType | true
+    _avg?: OrderedMealAvgAggregateInputType
+    _sum?: OrderedMealSumAggregateInputType
+    _min?: OrderedMealMinAggregateInputType
+    _max?: OrderedMealMaxAggregateInputType
+  }
+
+
+  export type OrderedMealGroupByOutputType = {
+    id: number
+    mealId: number
+    units: number
+    orderId: number
+    _count: OrderedMealCountAggregateOutputType | null
+    _avg: OrderedMealAvgAggregateOutputType | null
+    _sum: OrderedMealSumAggregateOutputType | null
+    _min: OrderedMealMinAggregateOutputType | null
+    _max: OrderedMealMaxAggregateOutputType | null
+  }
+
+  type GetOrderedMealGroupByPayload<T extends OrderedMealGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickArray<OrderedMealGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderedMealGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderedMealGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderedMealGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderedMealSelect = {
+    id?: boolean
+    mealId?: boolean
+    units?: boolean
+    orderId?: boolean
+    order?: boolean | OrderArgs
+  }
+
+
+  export type OrderedMealInclude = {
+    order?: boolean | OrderArgs
+  }
+
+  export type OrderedMealGetPayload<S extends boolean | null | undefined | OrderedMealArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? OrderedMeal :
+    S extends undefined ? never :
+    S extends { include: any } & (OrderedMealArgs | OrderedMealFindManyArgs)
+    ? OrderedMeal  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'order' ? OrderGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (OrderedMealArgs | OrderedMealFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'order' ? OrderGetPayload<S['select'][P]> :  P extends keyof OrderedMeal ? OrderedMeal[P] : never
+  } 
+      : OrderedMeal
+
+
+  type OrderedMealCountArgs = 
+    Omit<OrderedMealFindManyArgs, 'select' | 'include'> & {
+      select?: OrderedMealCountAggregateInputType | true
+    }
+
+  export interface OrderedMealDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+
+    /**
+     * Find zero or one OrderedMeal that matches the filter.
+     * @param {OrderedMealFindUniqueArgs} args - Arguments to find a OrderedMeal
+     * @example
+     * // Get one OrderedMeal
+     * const orderedMeal = await prisma.orderedMeal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends OrderedMealFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, OrderedMealFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'OrderedMeal'> extends True ? Prisma__OrderedMealClient<OrderedMealGetPayload<T>> : Prisma__OrderedMealClient<OrderedMealGetPayload<T> | null, null>
+
+    /**
+     * Find one OrderedMeal that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {OrderedMealFindUniqueOrThrowArgs} args - Arguments to find a OrderedMeal
+     * @example
+     * // Get one OrderedMeal
+     * const orderedMeal = await prisma.orderedMeal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends OrderedMealFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, OrderedMealFindUniqueOrThrowArgs>
+    ): Prisma__OrderedMealClient<OrderedMealGetPayload<T>>
+
+    /**
+     * Find the first OrderedMeal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderedMealFindFirstArgs} args - Arguments to find a OrderedMeal
+     * @example
+     * // Get one OrderedMeal
+     * const orderedMeal = await prisma.orderedMeal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends OrderedMealFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, OrderedMealFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'OrderedMeal'> extends True ? Prisma__OrderedMealClient<OrderedMealGetPayload<T>> : Prisma__OrderedMealClient<OrderedMealGetPayload<T> | null, null>
+
+    /**
+     * Find the first OrderedMeal that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderedMealFindFirstOrThrowArgs} args - Arguments to find a OrderedMeal
+     * @example
+     * // Get one OrderedMeal
+     * const orderedMeal = await prisma.orderedMeal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends OrderedMealFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, OrderedMealFindFirstOrThrowArgs>
+    ): Prisma__OrderedMealClient<OrderedMealGetPayload<T>>
+
+    /**
+     * Find zero or more OrderedMeals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderedMealFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrderedMeals
+     * const orderedMeals = await prisma.orderedMeal.findMany()
+     * 
+     * // Get first 10 OrderedMeals
+     * const orderedMeals = await prisma.orderedMeal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderedMealWithIdOnly = await prisma.orderedMeal.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends OrderedMealFindManyArgs>(
+      args?: SelectSubset<T, OrderedMealFindManyArgs>
+    ): Prisma.PrismaPromise<Array<OrderedMealGetPayload<T>>>
+
+    /**
+     * Create a OrderedMeal.
+     * @param {OrderedMealCreateArgs} args - Arguments to create a OrderedMeal.
+     * @example
+     * // Create one OrderedMeal
+     * const OrderedMeal = await prisma.orderedMeal.create({
+     *   data: {
+     *     // ... data to create a OrderedMeal
+     *   }
+     * })
+     * 
+    **/
+    create<T extends OrderedMealCreateArgs>(
+      args: SelectSubset<T, OrderedMealCreateArgs>
+    ): Prisma__OrderedMealClient<OrderedMealGetPayload<T>>
+
+    /**
+     * Create many OrderedMeals.
+     *     @param {OrderedMealCreateManyArgs} args - Arguments to create many OrderedMeals.
+     *     @example
+     *     // Create many OrderedMeals
+     *     const orderedMeal = await prisma.orderedMeal.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends OrderedMealCreateManyArgs>(
+      args?: SelectSubset<T, OrderedMealCreateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a OrderedMeal.
+     * @param {OrderedMealDeleteArgs} args - Arguments to delete one OrderedMeal.
+     * @example
+     * // Delete one OrderedMeal
+     * const OrderedMeal = await prisma.orderedMeal.delete({
+     *   where: {
+     *     // ... filter to delete one OrderedMeal
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends OrderedMealDeleteArgs>(
+      args: SelectSubset<T, OrderedMealDeleteArgs>
+    ): Prisma__OrderedMealClient<OrderedMealGetPayload<T>>
+
+    /**
+     * Update one OrderedMeal.
+     * @param {OrderedMealUpdateArgs} args - Arguments to update one OrderedMeal.
+     * @example
+     * // Update one OrderedMeal
+     * const orderedMeal = await prisma.orderedMeal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends OrderedMealUpdateArgs>(
+      args: SelectSubset<T, OrderedMealUpdateArgs>
+    ): Prisma__OrderedMealClient<OrderedMealGetPayload<T>>
+
+    /**
+     * Delete zero or more OrderedMeals.
+     * @param {OrderedMealDeleteManyArgs} args - Arguments to filter OrderedMeals to delete.
+     * @example
+     * // Delete a few OrderedMeals
+     * const { count } = await prisma.orderedMeal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends OrderedMealDeleteManyArgs>(
+      args?: SelectSubset<T, OrderedMealDeleteManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrderedMeals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderedMealUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrderedMeals
+     * const orderedMeal = await prisma.orderedMeal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends OrderedMealUpdateManyArgs>(
+      args: SelectSubset<T, OrderedMealUpdateManyArgs>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one OrderedMeal.
+     * @param {OrderedMealUpsertArgs} args - Arguments to update or create a OrderedMeal.
+     * @example
+     * // Update or create a OrderedMeal
+     * const orderedMeal = await prisma.orderedMeal.upsert({
+     *   create: {
+     *     // ... data to create a OrderedMeal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrderedMeal we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends OrderedMealUpsertArgs>(
+      args: SelectSubset<T, OrderedMealUpsertArgs>
+    ): Prisma__OrderedMealClient<OrderedMealGetPayload<T>>
+
+    /**
+     * Count the number of OrderedMeals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderedMealCountArgs} args - Arguments to filter OrderedMeals to count.
+     * @example
+     * // Count the number of OrderedMeals
+     * const count = await prisma.orderedMeal.count({
+     *   where: {
+     *     // ... the filter for the OrderedMeals we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderedMealCountArgs>(
+      args?: Subset<T, OrderedMealCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderedMealCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrderedMeal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderedMealAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderedMealAggregateArgs>(args: Subset<T, OrderedMealAggregateArgs>): Prisma.PrismaPromise<GetOrderedMealAggregateType<T>>
+
+    /**
+     * Group by OrderedMeal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderedMealGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderedMealGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderedMealGroupByArgs['orderBy'] }
+        : { orderBy?: OrderedMealGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderedMealGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderedMealGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrderedMeal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__OrderedMealClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    order<T extends OrderArgs= {}>(args?: Subset<T, OrderArgs>): Prisma__OrderClient<OrderGetPayload<T> | Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * OrderedMeal base type for findUnique actions
+   */
+  export type OrderedMealFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * Filter, which OrderedMeal to fetch.
+     */
+    where: OrderedMealWhereUniqueInput
+  }
+
+  /**
+   * OrderedMeal findUnique
+   */
+  export interface OrderedMealFindUniqueArgs extends OrderedMealFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * OrderedMeal findUniqueOrThrow
+   */
+  export type OrderedMealFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * Filter, which OrderedMeal to fetch.
+     */
+    where: OrderedMealWhereUniqueInput
+  }
+
+
+  /**
+   * OrderedMeal base type for findFirst actions
+   */
+  export type OrderedMealFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * Filter, which OrderedMeal to fetch.
+     */
+    where?: OrderedMealWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderedMeals to fetch.
+     */
+    orderBy?: Enumerable<OrderedMealOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderedMeals.
+     */
+    cursor?: OrderedMealWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderedMeals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderedMeals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderedMeals.
+     */
+    distinct?: Enumerable<OrderedMealScalarFieldEnum>
+  }
+
+  /**
+   * OrderedMeal findFirst
+   */
+  export interface OrderedMealFindFirstArgs extends OrderedMealFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * OrderedMeal findFirstOrThrow
+   */
+  export type OrderedMealFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * Filter, which OrderedMeal to fetch.
+     */
+    where?: OrderedMealWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderedMeals to fetch.
+     */
+    orderBy?: Enumerable<OrderedMealOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderedMeals.
+     */
+    cursor?: OrderedMealWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderedMeals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderedMeals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderedMeals.
+     */
+    distinct?: Enumerable<OrderedMealScalarFieldEnum>
+  }
+
+
+  /**
+   * OrderedMeal findMany
+   */
+  export type OrderedMealFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * Filter, which OrderedMeals to fetch.
+     */
+    where?: OrderedMealWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderedMeals to fetch.
+     */
+    orderBy?: Enumerable<OrderedMealOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrderedMeals.
+     */
+    cursor?: OrderedMealWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderedMeals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderedMeals.
+     */
+    skip?: number
+    distinct?: Enumerable<OrderedMealScalarFieldEnum>
+  }
+
+
+  /**
+   * OrderedMeal create
+   */
+  export type OrderedMealCreateArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * The data needed to create a OrderedMeal.
+     */
+    data: XOR<OrderedMealCreateInput, OrderedMealUncheckedCreateInput>
+  }
+
+
+  /**
+   * OrderedMeal createMany
+   */
+  export type OrderedMealCreateManyArgs = {
+    /**
+     * The data used to create many OrderedMeals.
+     */
+    data: Enumerable<OrderedMealCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * OrderedMeal update
+   */
+  export type OrderedMealUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * The data needed to update a OrderedMeal.
+     */
+    data: XOR<OrderedMealUpdateInput, OrderedMealUncheckedUpdateInput>
+    /**
+     * Choose, which OrderedMeal to update.
+     */
+    where: OrderedMealWhereUniqueInput
+  }
+
+
+  /**
+   * OrderedMeal updateMany
+   */
+  export type OrderedMealUpdateManyArgs = {
+    /**
+     * The data used to update OrderedMeals.
+     */
+    data: XOR<OrderedMealUpdateManyMutationInput, OrderedMealUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderedMeals to update
+     */
+    where?: OrderedMealWhereInput
+  }
+
+
+  /**
+   * OrderedMeal upsert
+   */
+  export type OrderedMealUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * The filter to search for the OrderedMeal to update in case it exists.
+     */
+    where: OrderedMealWhereUniqueInput
+    /**
+     * In case the OrderedMeal found by the `where` argument doesn't exist, create a new OrderedMeal with this data.
+     */
+    create: XOR<OrderedMealCreateInput, OrderedMealUncheckedCreateInput>
+    /**
+     * In case the OrderedMeal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderedMealUpdateInput, OrderedMealUncheckedUpdateInput>
+  }
+
+
+  /**
+   * OrderedMeal delete
+   */
+  export type OrderedMealDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+    /**
+     * Filter which OrderedMeal to delete.
+     */
+    where: OrderedMealWhereUniqueInput
+  }
+
+
+  /**
+   * OrderedMeal deleteMany
+   */
+  export type OrderedMealDeleteManyArgs = {
+    /**
+     * Filter which OrderedMeals to delete
+     */
+    where?: OrderedMealWhereInput
+  }
+
+
+  /**
+   * OrderedMeal without action
+   */
+  export type OrderedMealArgs = {
+    /**
+     * Select specific fields to fetch from the OrderedMeal
+     */
+    select?: OrderedMealSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderedMealInclude | null
+  }
+
+
+
+  /**
    * Model Customer
    */
 
@@ -3354,19 +5480,31 @@ export namespace Prisma {
     otp_expiry?: boolean
     phone?: boolean
     isVerified?: boolean
+    order?: boolean | Customer$orderArgs
+    _count?: boolean | CustomerCountOutputTypeArgs
   }
 
+
+  export type CustomerInclude = {
+    order?: boolean | Customer$orderArgs
+    _count?: boolean | CustomerCountOutputTypeArgs
+  }
 
   export type CustomerGetPayload<S extends boolean | null | undefined | CustomerArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
     S extends true ? Customer :
     S extends undefined ? never :
     S extends { include: any } & (CustomerArgs | CustomerFindManyArgs)
-    ? Customer 
+    ? Customer  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'order' ? Array < OrderGetPayload<S['include'][P]>>  :
+        P extends '_count' ? CustomerCountOutputTypeGetPayload<S['include'][P]> :  never
+  } 
     : S extends { select: any } & (CustomerArgs | CustomerFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-    P extends keyof Customer ? Customer[P] : never
+        P extends 'order' ? Array < OrderGetPayload<S['select'][P]>>  :
+        P extends '_count' ? CustomerCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Customer ? Customer[P] : never
   } 
       : Customer
 
@@ -3738,6 +5876,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
+    order<T extends Customer$orderArgs= {}>(args?: Subset<T, Customer$orderArgs>): Prisma.PrismaPromise<Array<OrderGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -3775,6 +5914,10 @@ export namespace Prisma {
      */
     select?: CustomerSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
+    /**
      * Filter, which Customer to fetch.
      */
     where: CustomerWhereUniqueInput
@@ -3801,6 +5944,10 @@ export namespace Prisma {
      */
     select?: CustomerSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
+    /**
      * Filter, which Customer to fetch.
      */
     where: CustomerWhereUniqueInput
@@ -3815,6 +5962,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Customer
      */
     select?: CustomerSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
     /**
      * Filter, which Customer to fetch.
      */
@@ -3872,6 +6023,10 @@ export namespace Prisma {
      */
     select?: CustomerSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
+    /**
      * Filter, which Customer to fetch.
      */
     where?: CustomerWhereInput
@@ -3917,6 +6072,10 @@ export namespace Prisma {
      */
     select?: CustomerSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
+    /**
      * Filter, which Customers to fetch.
      */
     where?: CustomerWhereInput
@@ -3957,6 +6116,10 @@ export namespace Prisma {
      */
     select?: CustomerSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
+    /**
      * The data needed to create a Customer.
      */
     data: XOR<CustomerCreateInput, CustomerUncheckedCreateInput>
@@ -3983,6 +6146,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Customer
      */
     select?: CustomerSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
     /**
      * The data needed to update a Customer.
      */
@@ -4018,6 +6185,10 @@ export namespace Prisma {
      */
     select?: CustomerSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
+    /**
      * The filter to search for the Customer to update in case it exists.
      */
     where: CustomerWhereUniqueInput
@@ -4041,6 +6212,10 @@ export namespace Prisma {
      */
     select?: CustomerSelect | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
+    /**
      * Filter which Customer to delete.
      */
     where: CustomerWhereUniqueInput
@@ -4059,6 +6234,27 @@ export namespace Prisma {
 
 
   /**
+   * Customer.order
+   */
+  export type Customer$orderArgs = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: OrderInclude | null
+    where?: OrderWhereInput
+    orderBy?: Enumerable<OrderOrderByWithRelationInput>
+    cursor?: OrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<OrderScalarFieldEnum>
+  }
+
+
+  /**
    * Customer without action
    */
   export type CustomerArgs = {
@@ -4066,6 +6262,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Customer
      */
     select?: CustomerSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CustomerInclude | null
   }
 
 
@@ -6032,6 +8232,29 @@ export namespace Prisma {
   export type MealScalarFieldEnum = (typeof MealScalarFieldEnum)[keyof typeof MealScalarFieldEnum]
 
 
+  export const OrderScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    orderStatus: 'orderStatus',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    totalPrice: 'totalPrice',
+    customerId: 'customerId'
+  };
+
+  export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+  export const OrderedMealScalarFieldEnum: {
+    id: 'id',
+    mealId: 'mealId',
+    units: 'units',
+    orderId: 'orderId'
+  };
+
+  export type OrderedMealScalarFieldEnum = (typeof OrderedMealScalarFieldEnum)[keyof typeof OrderedMealScalarFieldEnum]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -6240,6 +8463,112 @@ export namespace Prisma {
     vendorId?: IntWithAggregatesFilter | number
   }
 
+  export type OrderWhereInput = {
+    AND?: Enumerable<OrderWhereInput>
+    OR?: Enumerable<OrderWhereInput>
+    NOT?: Enumerable<OrderWhereInput>
+    id?: IntFilter | number
+    code?: IntFilter | number
+    orderStatus?: BoolFilter | boolean
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
+    totalPrice?: FloatFilter | number
+    customerId?: IntFilter | number
+    customer?: XOR<CustomerRelationFilter, CustomerWhereInput>
+    orderedMeal?: OrderedMealListRelationFilter
+  }
+
+  export type OrderOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    orderStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    totalPrice?: SortOrder
+    customerId?: SortOrder
+    customer?: CustomerOrderByWithRelationInput
+    orderedMeal?: OrderedMealOrderByRelationAggregateInput
+  }
+
+  export type OrderWhereUniqueInput = {
+    id?: number
+    code?: number
+  }
+
+  export type OrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    orderStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    totalPrice?: SortOrder
+    customerId?: SortOrder
+    _count?: OrderCountOrderByAggregateInput
+    _avg?: OrderAvgOrderByAggregateInput
+    _max?: OrderMaxOrderByAggregateInput
+    _min?: OrderMinOrderByAggregateInput
+    _sum?: OrderSumOrderByAggregateInput
+  }
+
+  export type OrderScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<OrderScalarWhereWithAggregatesInput>
+    OR?: Enumerable<OrderScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<OrderScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    code?: IntWithAggregatesFilter | number
+    orderStatus?: BoolWithAggregatesFilter | boolean
+    createdAt?: DateTimeWithAggregatesFilter | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter | Date | string
+    totalPrice?: FloatWithAggregatesFilter | number
+    customerId?: IntWithAggregatesFilter | number
+  }
+
+  export type OrderedMealWhereInput = {
+    AND?: Enumerable<OrderedMealWhereInput>
+    OR?: Enumerable<OrderedMealWhereInput>
+    NOT?: Enumerable<OrderedMealWhereInput>
+    id?: IntFilter | number
+    mealId?: IntFilter | number
+    units?: IntFilter | number
+    orderId?: IntFilter | number
+    order?: XOR<OrderRelationFilter, OrderWhereInput>
+  }
+
+  export type OrderedMealOrderByWithRelationInput = {
+    id?: SortOrder
+    mealId?: SortOrder
+    units?: SortOrder
+    orderId?: SortOrder
+    order?: OrderOrderByWithRelationInput
+  }
+
+  export type OrderedMealWhereUniqueInput = {
+    id?: number
+    mealId?: number
+  }
+
+  export type OrderedMealOrderByWithAggregationInput = {
+    id?: SortOrder
+    mealId?: SortOrder
+    units?: SortOrder
+    orderId?: SortOrder
+    _count?: OrderedMealCountOrderByAggregateInput
+    _avg?: OrderedMealAvgOrderByAggregateInput
+    _max?: OrderedMealMaxOrderByAggregateInput
+    _min?: OrderedMealMinOrderByAggregateInput
+    _sum?: OrderedMealSumOrderByAggregateInput
+  }
+
+  export type OrderedMealScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<OrderedMealScalarWhereWithAggregatesInput>
+    OR?: Enumerable<OrderedMealScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<OrderedMealScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    mealId?: IntWithAggregatesFilter | number
+    units?: IntWithAggregatesFilter | number
+    orderId?: IntWithAggregatesFilter | number
+  }
+
   export type CustomerWhereInput = {
     AND?: Enumerable<CustomerWhereInput>
     OR?: Enumerable<CustomerWhereInput>
@@ -6253,6 +8582,7 @@ export namespace Prisma {
     otp_expiry?: BigIntFilter | bigint | number
     phone?: StringFilter | string
     isVerified?: BoolFilter | boolean
+    order?: OrderListRelationFilter
   }
 
   export type CustomerOrderByWithRelationInput = {
@@ -6265,6 +8595,7 @@ export namespace Prisma {
     otp_expiry?: SortOrder
     phone?: SortOrder
     isVerified?: SortOrder
+    order?: OrderOrderByRelationAggregateInput
   }
 
   export type CustomerWhereUniqueInput = {
@@ -6584,6 +8915,121 @@ export namespace Prisma {
     vendorId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type OrderCreateInput = {
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+    customer: CustomerCreateNestedOneWithoutOrderInput
+    orderedMeal?: OrderedMealCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderUncheckedCreateInput = {
+    id?: number
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+    customerId: number
+    orderedMeal?: OrderedMealUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderUpdateInput = {
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+    customer?: CustomerUpdateOneRequiredWithoutOrderNestedInput
+    orderedMeal?: OrderedMealUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+    customerId?: IntFieldUpdateOperationsInput | number
+    orderedMeal?: OrderedMealUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderCreateManyInput = {
+    id?: number
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+    customerId: number
+  }
+
+  export type OrderUpdateManyMutationInput = {
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type OrderUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+    customerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderedMealCreateInput = {
+    mealId: number
+    units?: number
+    order: OrderCreateNestedOneWithoutOrderedMealInput
+  }
+
+  export type OrderedMealUncheckedCreateInput = {
+    id?: number
+    mealId: number
+    units?: number
+    orderId: number
+  }
+
+  export type OrderedMealUpdateInput = {
+    mealId?: IntFieldUpdateOperationsInput | number
+    units?: IntFieldUpdateOperationsInput | number
+    order?: OrderUpdateOneRequiredWithoutOrderedMealNestedInput
+  }
+
+  export type OrderedMealUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealId?: IntFieldUpdateOperationsInput | number
+    units?: IntFieldUpdateOperationsInput | number
+    orderId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderedMealCreateManyInput = {
+    id?: number
+    mealId: number
+    units?: number
+    orderId: number
+  }
+
+  export type OrderedMealUpdateManyMutationInput = {
+    mealId?: IntFieldUpdateOperationsInput | number
+    units?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderedMealUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealId?: IntFieldUpdateOperationsInput | number
+    units?: IntFieldUpdateOperationsInput | number
+    orderId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type CustomerCreateInput = {
     username: string
     email: string
@@ -6593,6 +9039,7 @@ export namespace Prisma {
     otp_expiry: bigint | number
     phone: string
     isVerified?: boolean
+    order?: OrderCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateInput = {
@@ -6605,6 +9052,7 @@ export namespace Prisma {
     otp_expiry: bigint | number
     phone: string
     isVerified?: boolean
+    order?: OrderUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUpdateInput = {
@@ -6616,6 +9064,7 @@ export namespace Prisma {
     otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
     phone?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    order?: OrderUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateInput = {
@@ -6628,6 +9077,7 @@ export namespace Prisma {
     otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
     phone?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    order?: OrderUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerCreateManyInput = {
@@ -7086,6 +9536,145 @@ export namespace Prisma {
     _max?: NestedEnumFoodTypeFilter
   }
 
+  export type BoolFilter = {
+    equals?: boolean
+    not?: NestedBoolFilter | boolean
+  }
+
+  export type FloatFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatFilter | number
+  }
+
+  export type CustomerRelationFilter = {
+    is?: CustomerWhereInput
+    isNot?: CustomerWhereInput
+  }
+
+  export type OrderedMealListRelationFilter = {
+    every?: OrderedMealWhereInput
+    some?: OrderedMealWhereInput
+    none?: OrderedMealWhereInput
+  }
+
+  export type OrderedMealOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    orderStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    totalPrice?: SortOrder
+    customerId?: SortOrder
+  }
+
+  export type OrderAvgOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    totalPrice?: SortOrder
+    customerId?: SortOrder
+  }
+
+  export type OrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    orderStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    totalPrice?: SortOrder
+    customerId?: SortOrder
+  }
+
+  export type OrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    orderStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    totalPrice?: SortOrder
+    customerId?: SortOrder
+  }
+
+  export type OrderSumOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    totalPrice?: SortOrder
+    customerId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter = {
+    equals?: boolean
+    not?: NestedBoolWithAggregatesFilter | boolean
+    _count?: NestedIntFilter
+    _min?: NestedBoolFilter
+    _max?: NestedBoolFilter
+  }
+
+  export type FloatWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedFloatFilter
+    _min?: NestedFloatFilter
+    _max?: NestedFloatFilter
+  }
+
+  export type OrderRelationFilter = {
+    is?: OrderWhereInput
+    isNot?: OrderWhereInput
+  }
+
+  export type OrderedMealCountOrderByAggregateInput = {
+    id?: SortOrder
+    mealId?: SortOrder
+    units?: SortOrder
+    orderId?: SortOrder
+  }
+
+  export type OrderedMealAvgOrderByAggregateInput = {
+    id?: SortOrder
+    mealId?: SortOrder
+    units?: SortOrder
+    orderId?: SortOrder
+  }
+
+  export type OrderedMealMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mealId?: SortOrder
+    units?: SortOrder
+    orderId?: SortOrder
+  }
+
+  export type OrderedMealMinOrderByAggregateInput = {
+    id?: SortOrder
+    mealId?: SortOrder
+    units?: SortOrder
+    orderId?: SortOrder
+  }
+
+  export type OrderedMealSumOrderByAggregateInput = {
+    id?: SortOrder
+    mealId?: SortOrder
+    units?: SortOrder
+    orderId?: SortOrder
+  }
+
   export type BigIntFilter = {
     equals?: bigint | number
     in?: Enumerable<bigint> | Enumerable<number>
@@ -7097,9 +9686,14 @@ export namespace Prisma {
     not?: NestedBigIntFilter | bigint | number
   }
 
-  export type BoolFilter = {
-    equals?: boolean
-    not?: NestedBoolFilter | boolean
+  export type OrderListRelationFilter = {
+    every?: OrderWhereInput
+    some?: OrderWhereInput
+    none?: OrderWhereInput
+  }
+
+  export type OrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type CustomerCountOrderByAggregateInput = {
@@ -7166,14 +9760,6 @@ export namespace Prisma {
     _max?: NestedBigIntFilter
   }
 
-  export type BoolWithAggregatesFilter = {
-    equals?: boolean
-    not?: NestedBoolWithAggregatesFilter | boolean
-    _count?: NestedIntFilter
-    _min?: NestedBoolFilter
-    _max?: NestedBoolFilter
-  }
-
   export type VendorImageCountOrderByAggregateInput = {
     id?: SortOrder
     vendorId?: SortOrder
@@ -7203,17 +9789,6 @@ export namespace Prisma {
   export type VendorImageSumOrderByAggregateInput = {
     id?: SortOrder
     vendorId?: SortOrder
-  }
-
-  export type FloatFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatFilter | number
   }
 
   export type MealRelationFilter = {
@@ -7249,22 +9824,6 @@ export namespace Prisma {
     id?: SortOrder
     price?: SortOrder
     mealId?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatWithAggregatesFilter | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedFloatFilter
-    _min?: NestedFloatFilter
-    _max?: NestedFloatFilter
   }
 
   export type VendorCreatefoodTypeInput = {
@@ -7456,6 +10015,102 @@ export namespace Prisma {
     deleteMany?: Enumerable<MealImageScalarWhereInput>
   }
 
+  export type CustomerCreateNestedOneWithoutOrderInput = {
+    create?: XOR<CustomerCreateWithoutOrderInput, CustomerUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutOrderInput
+    connect?: CustomerWhereUniqueInput
+  }
+
+  export type OrderedMealCreateNestedManyWithoutOrderInput = {
+    create?: XOR<Enumerable<OrderedMealCreateWithoutOrderInput>, Enumerable<OrderedMealUncheckedCreateWithoutOrderInput>>
+    connectOrCreate?: Enumerable<OrderedMealCreateOrConnectWithoutOrderInput>
+    createMany?: OrderedMealCreateManyOrderInputEnvelope
+    connect?: Enumerable<OrderedMealWhereUniqueInput>
+  }
+
+  export type OrderedMealUncheckedCreateNestedManyWithoutOrderInput = {
+    create?: XOR<Enumerable<OrderedMealCreateWithoutOrderInput>, Enumerable<OrderedMealUncheckedCreateWithoutOrderInput>>
+    connectOrCreate?: Enumerable<OrderedMealCreateOrConnectWithoutOrderInput>
+    createMany?: OrderedMealCreateManyOrderInputEnvelope
+    connect?: Enumerable<OrderedMealWhereUniqueInput>
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type CustomerUpdateOneRequiredWithoutOrderNestedInput = {
+    create?: XOR<CustomerCreateWithoutOrderInput, CustomerUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutOrderInput
+    upsert?: CustomerUpsertWithoutOrderInput
+    connect?: CustomerWhereUniqueInput
+    update?: XOR<CustomerUpdateWithoutOrderInput, CustomerUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type OrderedMealUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<Enumerable<OrderedMealCreateWithoutOrderInput>, Enumerable<OrderedMealUncheckedCreateWithoutOrderInput>>
+    connectOrCreate?: Enumerable<OrderedMealCreateOrConnectWithoutOrderInput>
+    upsert?: Enumerable<OrderedMealUpsertWithWhereUniqueWithoutOrderInput>
+    createMany?: OrderedMealCreateManyOrderInputEnvelope
+    set?: Enumerable<OrderedMealWhereUniqueInput>
+    disconnect?: Enumerable<OrderedMealWhereUniqueInput>
+    delete?: Enumerable<OrderedMealWhereUniqueInput>
+    connect?: Enumerable<OrderedMealWhereUniqueInput>
+    update?: Enumerable<OrderedMealUpdateWithWhereUniqueWithoutOrderInput>
+    updateMany?: Enumerable<OrderedMealUpdateManyWithWhereWithoutOrderInput>
+    deleteMany?: Enumerable<OrderedMealScalarWhereInput>
+  }
+
+  export type OrderedMealUncheckedUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<Enumerable<OrderedMealCreateWithoutOrderInput>, Enumerable<OrderedMealUncheckedCreateWithoutOrderInput>>
+    connectOrCreate?: Enumerable<OrderedMealCreateOrConnectWithoutOrderInput>
+    upsert?: Enumerable<OrderedMealUpsertWithWhereUniqueWithoutOrderInput>
+    createMany?: OrderedMealCreateManyOrderInputEnvelope
+    set?: Enumerable<OrderedMealWhereUniqueInput>
+    disconnect?: Enumerable<OrderedMealWhereUniqueInput>
+    delete?: Enumerable<OrderedMealWhereUniqueInput>
+    connect?: Enumerable<OrderedMealWhereUniqueInput>
+    update?: Enumerable<OrderedMealUpdateWithWhereUniqueWithoutOrderInput>
+    updateMany?: Enumerable<OrderedMealUpdateManyWithWhereWithoutOrderInput>
+    deleteMany?: Enumerable<OrderedMealScalarWhereInput>
+  }
+
+  export type OrderCreateNestedOneWithoutOrderedMealInput = {
+    create?: XOR<OrderCreateWithoutOrderedMealInput, OrderUncheckedCreateWithoutOrderedMealInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutOrderedMealInput
+    connect?: OrderWhereUniqueInput
+  }
+
+  export type OrderUpdateOneRequiredWithoutOrderedMealNestedInput = {
+    create?: XOR<OrderCreateWithoutOrderedMealInput, OrderUncheckedCreateWithoutOrderedMealInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutOrderedMealInput
+    upsert?: OrderUpsertWithoutOrderedMealInput
+    connect?: OrderWhereUniqueInput
+    update?: XOR<OrderUpdateWithoutOrderedMealInput, OrderUncheckedUpdateWithoutOrderedMealInput>
+  }
+
+  export type OrderCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<Enumerable<OrderCreateWithoutCustomerInput>, Enumerable<OrderUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<OrderCreateOrConnectWithoutCustomerInput>
+    createMany?: OrderCreateManyCustomerInputEnvelope
+    connect?: Enumerable<OrderWhereUniqueInput>
+  }
+
+  export type OrderUncheckedCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<Enumerable<OrderCreateWithoutCustomerInput>, Enumerable<OrderUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<OrderCreateOrConnectWithoutCustomerInput>
+    createMany?: OrderCreateManyCustomerInputEnvelope
+    connect?: Enumerable<OrderWhereUniqueInput>
+  }
+
   export type BigIntFieldUpdateOperationsInput = {
     set?: bigint | number
     increment?: bigint | number
@@ -7464,8 +10119,32 @@ export namespace Prisma {
     divide?: bigint | number
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type OrderUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<Enumerable<OrderCreateWithoutCustomerInput>, Enumerable<OrderUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<OrderCreateOrConnectWithoutCustomerInput>
+    upsert?: Enumerable<OrderUpsertWithWhereUniqueWithoutCustomerInput>
+    createMany?: OrderCreateManyCustomerInputEnvelope
+    set?: Enumerable<OrderWhereUniqueInput>
+    disconnect?: Enumerable<OrderWhereUniqueInput>
+    delete?: Enumerable<OrderWhereUniqueInput>
+    connect?: Enumerable<OrderWhereUniqueInput>
+    update?: Enumerable<OrderUpdateWithWhereUniqueWithoutCustomerInput>
+    updateMany?: Enumerable<OrderUpdateManyWithWhereWithoutCustomerInput>
+    deleteMany?: Enumerable<OrderScalarWhereInput>
+  }
+
+  export type OrderUncheckedUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<Enumerable<OrderCreateWithoutCustomerInput>, Enumerable<OrderUncheckedCreateWithoutCustomerInput>>
+    connectOrCreate?: Enumerable<OrderCreateOrConnectWithoutCustomerInput>
+    upsert?: Enumerable<OrderUpsertWithWhereUniqueWithoutCustomerInput>
+    createMany?: OrderCreateManyCustomerInputEnvelope
+    set?: Enumerable<OrderWhereUniqueInput>
+    disconnect?: Enumerable<OrderWhereUniqueInput>
+    delete?: Enumerable<OrderWhereUniqueInput>
+    connect?: Enumerable<OrderWhereUniqueInput>
+    update?: Enumerable<OrderUpdateWithWhereUniqueWithoutCustomerInput>
+    updateMany?: Enumerable<OrderUpdateManyWithWhereWithoutCustomerInput>
+    deleteMany?: Enumerable<OrderScalarWhereInput>
   }
 
   export type VendorCreateNestedOneWithoutCoverImagesInput = {
@@ -7486,14 +10165,6 @@ export namespace Prisma {
     create?: XOR<MealCreateWithoutImagesInput, MealUncheckedCreateWithoutImagesInput>
     connectOrCreate?: MealCreateOrConnectWithoutImagesInput
     connect?: MealWhereUniqueInput
-  }
-
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type MealUpdateOneRequiredWithoutImagesNestedInput = {
@@ -7714,36 +10385,9 @@ export namespace Prisma {
     _max?: NestedEnumFoodTypeFilter
   }
 
-  export type NestedBigIntFilter = {
-    equals?: bigint | number
-    in?: Enumerable<bigint> | Enumerable<number>
-    notIn?: Enumerable<bigint> | Enumerable<number>
-    lt?: bigint | number
-    lte?: bigint | number
-    gt?: bigint | number
-    gte?: bigint | number
-    not?: NestedBigIntFilter | bigint | number
-  }
-
   export type NestedBoolFilter = {
     equals?: boolean
     not?: NestedBoolFilter | boolean
-  }
-
-  export type NestedBigIntWithAggregatesFilter = {
-    equals?: bigint | number
-    in?: Enumerable<bigint> | Enumerable<number>
-    notIn?: Enumerable<bigint> | Enumerable<number>
-    lt?: bigint | number
-    lte?: bigint | number
-    gt?: bigint | number
-    gte?: bigint | number
-    not?: NestedBigIntWithAggregatesFilter | bigint | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedBigIntFilter
-    _min?: NestedBigIntFilter
-    _max?: NestedBigIntFilter
   }
 
   export type NestedBoolWithAggregatesFilter = {
@@ -7768,6 +10412,33 @@ export namespace Prisma {
     _sum?: NestedFloatFilter
     _min?: NestedFloatFilter
     _max?: NestedFloatFilter
+  }
+
+  export type NestedBigIntFilter = {
+    equals?: bigint | number
+    in?: Enumerable<bigint> | Enumerable<number>
+    notIn?: Enumerable<bigint> | Enumerable<number>
+    lt?: bigint | number
+    lte?: bigint | number
+    gt?: bigint | number
+    gte?: bigint | number
+    not?: NestedBigIntFilter | bigint | number
+  }
+
+  export type NestedBigIntWithAggregatesFilter = {
+    equals?: bigint | number
+    in?: Enumerable<bigint> | Enumerable<number>
+    notIn?: Enumerable<bigint> | Enumerable<number>
+    lt?: bigint | number
+    lte?: bigint | number
+    gt?: bigint | number
+    gte?: bigint | number
+    not?: NestedBigIntWithAggregatesFilter | bigint | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedBigIntFilter
+    _min?: NestedBigIntFilter
+    _max?: NestedBigIntFilter
   }
 
   export type VendorImageCreateWithoutVendorInput = {
@@ -7999,6 +10670,215 @@ export namespace Prisma {
     coverImages?: VendorImageUncheckedUpdateManyWithoutVendorNestedInput
   }
 
+  export type CustomerCreateWithoutOrderInput = {
+    username: string
+    email: string
+    password: string
+    salt: string
+    otp: number
+    otp_expiry: bigint | number
+    phone: string
+    isVerified?: boolean
+  }
+
+  export type CustomerUncheckedCreateWithoutOrderInput = {
+    id?: number
+    username: string
+    email: string
+    password: string
+    salt: string
+    otp: number
+    otp_expiry: bigint | number
+    phone: string
+    isVerified?: boolean
+  }
+
+  export type CustomerCreateOrConnectWithoutOrderInput = {
+    where: CustomerWhereUniqueInput
+    create: XOR<CustomerCreateWithoutOrderInput, CustomerUncheckedCreateWithoutOrderInput>
+  }
+
+  export type OrderedMealCreateWithoutOrderInput = {
+    mealId: number
+    units?: number
+  }
+
+  export type OrderedMealUncheckedCreateWithoutOrderInput = {
+    id?: number
+    mealId: number
+    units?: number
+  }
+
+  export type OrderedMealCreateOrConnectWithoutOrderInput = {
+    where: OrderedMealWhereUniqueInput
+    create: XOR<OrderedMealCreateWithoutOrderInput, OrderedMealUncheckedCreateWithoutOrderInput>
+  }
+
+  export type OrderedMealCreateManyOrderInputEnvelope = {
+    data: Enumerable<OrderedMealCreateManyOrderInput>
+    skipDuplicates?: boolean
+  }
+
+  export type CustomerUpsertWithoutOrderInput = {
+    update: XOR<CustomerUpdateWithoutOrderInput, CustomerUncheckedUpdateWithoutOrderInput>
+    create: XOR<CustomerCreateWithoutOrderInput, CustomerUncheckedCreateWithoutOrderInput>
+  }
+
+  export type CustomerUpdateWithoutOrderInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    salt?: StringFieldUpdateOperationsInput | string
+    otp?: IntFieldUpdateOperationsInput | number
+    otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
+    phone?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type CustomerUncheckedUpdateWithoutOrderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    salt?: StringFieldUpdateOperationsInput | string
+    otp?: IntFieldUpdateOperationsInput | number
+    otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
+    phone?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type OrderedMealUpsertWithWhereUniqueWithoutOrderInput = {
+    where: OrderedMealWhereUniqueInput
+    update: XOR<OrderedMealUpdateWithoutOrderInput, OrderedMealUncheckedUpdateWithoutOrderInput>
+    create: XOR<OrderedMealCreateWithoutOrderInput, OrderedMealUncheckedCreateWithoutOrderInput>
+  }
+
+  export type OrderedMealUpdateWithWhereUniqueWithoutOrderInput = {
+    where: OrderedMealWhereUniqueInput
+    data: XOR<OrderedMealUpdateWithoutOrderInput, OrderedMealUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type OrderedMealUpdateManyWithWhereWithoutOrderInput = {
+    where: OrderedMealScalarWhereInput
+    data: XOR<OrderedMealUpdateManyMutationInput, OrderedMealUncheckedUpdateManyWithoutOrderedMealInput>
+  }
+
+  export type OrderedMealScalarWhereInput = {
+    AND?: Enumerable<OrderedMealScalarWhereInput>
+    OR?: Enumerable<OrderedMealScalarWhereInput>
+    NOT?: Enumerable<OrderedMealScalarWhereInput>
+    id?: IntFilter | number
+    mealId?: IntFilter | number
+    units?: IntFilter | number
+    orderId?: IntFilter | number
+  }
+
+  export type OrderCreateWithoutOrderedMealInput = {
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+    customer: CustomerCreateNestedOneWithoutOrderInput
+  }
+
+  export type OrderUncheckedCreateWithoutOrderedMealInput = {
+    id?: number
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+    customerId: number
+  }
+
+  export type OrderCreateOrConnectWithoutOrderedMealInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutOrderedMealInput, OrderUncheckedCreateWithoutOrderedMealInput>
+  }
+
+  export type OrderUpsertWithoutOrderedMealInput = {
+    update: XOR<OrderUpdateWithoutOrderedMealInput, OrderUncheckedUpdateWithoutOrderedMealInput>
+    create: XOR<OrderCreateWithoutOrderedMealInput, OrderUncheckedCreateWithoutOrderedMealInput>
+  }
+
+  export type OrderUpdateWithoutOrderedMealInput = {
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+    customer?: CustomerUpdateOneRequiredWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutOrderedMealInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+    customerId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderCreateWithoutCustomerInput = {
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+    orderedMeal?: OrderedMealCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderUncheckedCreateWithoutCustomerInput = {
+    id?: number
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+    orderedMeal?: OrderedMealUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderCreateOrConnectWithoutCustomerInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutCustomerInput, OrderUncheckedCreateWithoutCustomerInput>
+  }
+
+  export type OrderCreateManyCustomerInputEnvelope = {
+    data: Enumerable<OrderCreateManyCustomerInput>
+    skipDuplicates?: boolean
+  }
+
+  export type OrderUpsertWithWhereUniqueWithoutCustomerInput = {
+    where: OrderWhereUniqueInput
+    update: XOR<OrderUpdateWithoutCustomerInput, OrderUncheckedUpdateWithoutCustomerInput>
+    create: XOR<OrderCreateWithoutCustomerInput, OrderUncheckedCreateWithoutCustomerInput>
+  }
+
+  export type OrderUpdateWithWhereUniqueWithoutCustomerInput = {
+    where: OrderWhereUniqueInput
+    data: XOR<OrderUpdateWithoutCustomerInput, OrderUncheckedUpdateWithoutCustomerInput>
+  }
+
+  export type OrderUpdateManyWithWhereWithoutCustomerInput = {
+    where: OrderScalarWhereInput
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutOrderInput>
+  }
+
+  export type OrderScalarWhereInput = {
+    AND?: Enumerable<OrderScalarWhereInput>
+    OR?: Enumerable<OrderScalarWhereInput>
+    NOT?: Enumerable<OrderScalarWhereInput>
+    id?: IntFilter | number
+    code?: IntFilter | number
+    orderStatus?: BoolFilter | boolean
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
+    totalPrice?: FloatFilter | number
+    customerId?: IntFilter | number
+  }
+
   export type VendorCreateWithoutCoverImagesInput = {
     pinCode: string
     brandName: string
@@ -8204,6 +11084,66 @@ export namespace Prisma {
   export type MealImageUncheckedUpdateManyWithoutImagesInput = {
     id?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type OrderedMealCreateManyOrderInput = {
+    id?: number
+    mealId: number
+    units?: number
+  }
+
+  export type OrderedMealUpdateWithoutOrderInput = {
+    mealId?: IntFieldUpdateOperationsInput | number
+    units?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderedMealUncheckedUpdateWithoutOrderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealId?: IntFieldUpdateOperationsInput | number
+    units?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderedMealUncheckedUpdateManyWithoutOrderedMealInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mealId?: IntFieldUpdateOperationsInput | number
+    units?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type OrderCreateManyCustomerInput = {
+    id?: number
+    code: number
+    orderStatus?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    totalPrice: number
+  }
+
+  export type OrderUpdateWithoutCustomerInput = {
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+    orderedMeal?: OrderedMealUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutCustomerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
+    orderedMeal?: OrderedMealUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateManyWithoutOrderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: IntFieldUpdateOperationsInput | number
+    orderStatus?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalPrice?: FloatFieldUpdateOperationsInput | number
   }
 
 

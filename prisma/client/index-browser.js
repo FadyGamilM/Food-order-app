@@ -117,6 +117,23 @@ exports.Prisma.MealScalarFieldEnum = makeEnum({
   vendorId: 'vendorId'
 });
 
+exports.Prisma.OrderScalarFieldEnum = makeEnum({
+  id: 'id',
+  code: 'code',
+  orderStatus: 'orderStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  totalPrice: 'totalPrice',
+  customerId: 'customerId'
+});
+
+exports.Prisma.OrderedMealScalarFieldEnum = makeEnum({
+  id: 'id',
+  mealId: 'mealId',
+  units: 'units',
+  orderId: 'orderId'
+});
+
 exports.Prisma.QueryMode = makeEnum({
   default: 'default',
   insensitive: 'insensitive'
@@ -171,6 +188,8 @@ exports.FoodType = makeEnum({
 exports.Prisma.ModelName = makeEnum({
   Vendor: 'Vendor',
   Meal: 'Meal',
+  Order: 'Order',
+  OrderedMeal: 'OrderedMeal',
   Customer: 'Customer',
   VendorImage: 'VendorImage',
   MealImage: 'MealImage'
