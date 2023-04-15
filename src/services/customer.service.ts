@@ -5,6 +5,8 @@ import { db } from "./prisma.service";
 import { generateOTP } from "../utility/GenerateOTP";
 import { EncryptPassword, GenerateSignature, ValidateSignature, generateSalt } from "../utility/PasswordEncryption";
 import { RequestOTP } from "./twilio.service";
+import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
+
 export const signupCustomer = async (customerDto: customerSignupDto) =>
 {
    try {
@@ -68,4 +70,31 @@ export const signupCustomer = async (customerDto: customerSignupDto) =>
          }
       )();
    }
+};
+
+export const VerifyCustomerAccount = async (customerPayload: AuthorizationPayloadDto, otp: number) =>
+{
+   //* validation check
+   const customer = await db.customer.findUnique({ where: { id: customerPayload.id } });
+   if (customer === null) return customer; // TODO => customize the returns with myCustomStatusCode later
+
+   Log(`${otp - customer.otp}`);
+
+   //* check the opt_expiry date validity .. 
+   if (otp == customer.otp) {
+      let expiryDate = customer.otp_expiry;
+
+      let isValid: boolean = (Number(expiryDate) - Date.now()) > 0 ? true : false;
+
+      if (isValid) {
+         let verifiedCustomer = await db.customer.update({ where: { id: customer.id }, data: { isVerified: true } });
+         return verifiedCustomer;
+      }
+      else return null;
+   } else {
+
+      return null;
+   }
+
+
 };

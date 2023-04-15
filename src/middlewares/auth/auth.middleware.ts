@@ -1,4 +1,5 @@
 import { AuthorizationPayloadDto } from "../../dtos/auth/authorizationPayloadDto";
+import { Log } from "../../utility/ConsoleLogger";
 import { ValidateSignature } from "../../utility/PasswordEncryption";
 import { Response, NextFunction, Request } from "express";
 

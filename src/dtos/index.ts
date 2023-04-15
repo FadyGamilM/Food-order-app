@@ -5,3 +5,4 @@ export * from "./vendor/updateVendorProfile";
 export * from "./vendor/createMealDto";
 export * from "./customer/customerSignaturePayloadDto";
 export * from "./customer/customerSignupDto";
+export * from "./customer/getCustomerDto";

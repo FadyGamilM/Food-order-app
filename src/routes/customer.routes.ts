@@ -6,10 +6,16 @@ import { SignupController, LoginCustomerController, VerifyCustomerAccountControl
 const router = Router();
 
 router.post("/signup", SignupController);
+
 router.post("/login", LoginCustomerController);
+
 router.get("/profile", Authorize, GetCustomerProfileController);
+
 router.patch("/profile", Authorize, UpdateCustomerProfileController);
+
+//* to verify the customer account based on the received otp 
 router.patch("/verify", Authorize, VerifyCustomerAccountController);
+
 router.get("/otp", GetOTPController);
 
 export

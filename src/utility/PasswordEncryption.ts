@@ -56,6 +56,7 @@ export const ValidateSignature = async (req: Request): Promise<boolean> =>
       //*  so we need to verify who is this user ?
       let authorizedUserPayload: AuthorizationPayloadDto = await jwt.verify(signature, APP_SECRET) as AuthorizationPayloadDto;
 
+
       //* now assign the user to the request to be accessed in the next requests handlers
       req.user = authorizedUserPayload;
 
