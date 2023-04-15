@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { signupCustomer, VerifyCustomerAccount } from "../services";
-import { customerSignupDto, getCustomerDto } from "../dtos";
+import { LoginCustomer, signupCustomer, VerifyCustomerAccount } from "../services";
+import { customerLoginDto, customerSignupDto, getCustomerDto } from "../dtos";
 import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
 import { Log } from "../utility/ConsoleLogger";
 
@@ -14,7 +14,18 @@ export const SignupController = async (req: Request, res: Response, next: NextFu
    return res.status(201).json({ "data": response });
 };
 
-export const LoginCustomerController = async (req: Request, res: Response, neext: NextFunction) => { };
+export const LoginCustomerController = async (req: Request, res: Response, neext: NextFunction) =>
+{
+   //* extract the request body 
+   const loginDto: customerLoginDto = <customerLoginDto>req.body;
+
+   //* call the service business logic
+   const response = await LoginCustomer(loginDto);
+
+   //* return the response
+   if (response === null) return res.status(401).json({ "error": "invalid credentials" });
+   else return res.status(200).json({ "data": response });
+};
 
 export const GetCustomerProfileController = async (req: Request, res: Response, neext: NextFunction) => { };
 

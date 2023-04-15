@@ -53,7 +53,7 @@ model Meal {
 model Customer {
   id         Int     @id @default(autoincrement())
   username   String
-  email      String
+  email      String  @unique
   password   String
   salt       String
   otp        Int

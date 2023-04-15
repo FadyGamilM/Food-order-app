@@ -1,5 +1,5 @@
 import { exit } from "process";
-import { customerSignupDto, customerSignaturePayloadDto } from "../dtos";
+import { customerSignupDto, customerSignaturePayloadDto, customerLoginDto, getCustomerDto } from "../dtos";
 import { Log } from "../utility/ConsoleLogger";
 import { db } from "./prisma.service";
 import { generateOTP } from "../utility/GenerateOTP";
@@ -13,6 +13,10 @@ export const signupCustomer = async (customerDto: customerSignupDto) =>
 
       //* validate this dto
       if (customerDto.email === "" || customerDto.password === "" || customerDto.username === "" || customerDto.phone === "") return null;
+
+      //* check if there is any user in db with this email 
+      let isEmailExistsBefore = await db.customer.findUnique({ where: { email: customerDto.email } });
+      if (isEmailExistsBefore !== null) return null;
 
       //* generate otp for this user 
       let otp_info = generateOTP();
@@ -95,6 +99,31 @@ export const VerifyCustomerAccount = async (customerPayload: AuthorizationPayloa
 
       return null;
    }
+};
 
+export const LoginCustomer = async (loginDto: customerLoginDto) =>
+{
+   //* check if there is any user in the datbase with this email
+   const customerExists = await db.customer.findUnique({ where: { email: loginDto.email } });
+   if (customerExists === null) return null;
+
+   //* hash the pass using the same saved salt
+   let hashedPass: string = await EncryptPassword(loginDto.password, customerExists.salt);
+
+   //* compare the passwords to verify the credentials 
+   if (hashedPass === customerExists.password) {
+      //* generate the signature and return the result to the controller to return the response 
+      let customerPayload: getCustomerDto = {
+         email: customerExists.email,
+         id: customerExists.id,
+         isVerified: customerExists.isVerified,
+         phone: customerExists.phone,
+         username: customerExists.phone
+      };
+      let paylaodSignature = await GenerateSignature(customerPayload);
+      return paylaodSignature;
+   } else {
+      return null;
+   }
 
 };

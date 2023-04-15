@@ -6269,6 +6269,7 @@ export namespace Prisma {
 
   export type CustomerWhereUniqueInput = {
     id?: number
+    email?: string
   }
 
   export type CustomerOrderByWithAggregationInput = {
