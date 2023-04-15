@@ -6,6 +6,7 @@ import { generateOTP } from "../utility/GenerateOTP";
 import { EncryptPassword, GenerateSignature, ValidateSignature, generateSalt } from "../utility/PasswordEncryption";
 import { RequestOTP } from "./twilio.service";
 import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
+import { Customer } from "../../prisma/client";
 
 export const signupCustomer = async (customerDto: customerSignupDto) =>
 {
@@ -125,5 +126,36 @@ export const LoginCustomer = async (loginDto: customerLoginDto) =>
    } else {
       return null;
    }
+
+};
+
+export const RequestNewOtpService = async (customer: AuthorizationPayloadDto) =>
+{
+   //* check if this customer really in db or not 
+   let existingCustomer = await db.customer.findUnique({ where: { email: customer.email } });
+   if (!existingCustomer) return null;
+
+   //* generate a new otp and otp_expiry
+   const otpInfo = generateOTP();
+
+   //* update the customer info and persist this updated customer into the database 
+   let updatedCustomer = await db.customer.update({
+      where: { id: existingCustomer.id }, data: {
+         otp: otpInfo.otp, otp_expiry: otpInfo.opt_expiry
+      }
+   });
+
+   //* send this otp number to the customer phone 
+   await RequestOTP(updatedCustomer.otp, updatedCustomer.phone);
+
+   //* return the updated customer signature to the controller to send the response 
+   let customerPaylaod: getCustomerDto = {
+      id: updatedCustomer.id,
+      email: updatedCustomer.email,
+      username: updatedCustomer.username,
+      phone: updatedCustomer.phone,
+      isVerified: updatedCustomer.isVerified
+   };
+   return await GenerateSignature(customerPaylaod);
 
 };

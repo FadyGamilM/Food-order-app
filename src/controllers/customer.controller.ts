@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { LoginCustomer, signupCustomer, VerifyCustomerAccount } from "../services";
+import { LoginCustomer, RequestNewOtpService, signupCustomer, VerifyCustomerAccount } from "../services";
 import { customerLoginDto, customerSignupDto, getCustomerDto } from "../dtos";
 import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
 import { Log } from "../utility/ConsoleLogger";
@@ -49,4 +49,17 @@ export const VerifyCustomerAccountController = async (req: Request, res: Respons
    }
 };
 
-export const GetOTPController = async (req: Request, res: Response, next: NextFunction) => { };
+export const GetOTPController = async (req: Request, res: Response, next: NextFunction) =>
+{
+   //* get the user from the req after passing the authorization middleware
+   const customer = req.user;
+
+   if (!customer) return res.status(401).json({ "error": "Not Authenticated" });
+
+   //* call the bsuniess logic service
+   const response = await RequestNewOtpService(customer);
+
+   //* return the response
+   if (response === null) return res.status(400).json({ "error": "bad request" });
+   else return res.status(200).json({ "data": response });
+};

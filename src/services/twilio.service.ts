@@ -19,5 +19,7 @@ export const RequestOTP = async (otp: number, toPhoneNumber: string) =>
       from: `${twilio_my_phone_number}`,
       to: `+20${toPhoneNumber}`
    });
+
+   return;
 };
 

@@ -16,7 +16,7 @@ router.patch("/profile", Authorize, UpdateCustomerProfileController);
 //* to verify the customer account based on the received otp 
 router.patch("/verify", Authorize, VerifyCustomerAccountController);
 
-router.get("/otp", GetOTPController);
+router.get("/otp", Authorize, GetOTPController);
 
 export
 {
