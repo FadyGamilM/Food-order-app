@@ -57,7 +57,7 @@ model Customer {
   password   String
   salt       String
   otp        Int
-  otp_expiry Int // i will store the milleseconds here and conert it to Date using new Date().setTime(otp_expiry) method in my service logic
+  otp_expiry BigInt // i will store the milleseconds here and conert it to Date using new Date().setTime(otp_expiry) method in my service logic
   phone      String
   isVerified Boolean @default(false)
 }

@@ -58,7 +58,7 @@ export type Customer = {
   password: string
   salt: string
   otp: number
-  otp_expiry: number
+  otp_expiry: bigint
   phone: string
   isVerified: boolean
 }
@@ -3136,7 +3136,7 @@ export namespace Prisma {
   export type CustomerSumAggregateOutputType = {
     id: number | null
     otp: number | null
-    otp_expiry: number | null
+    otp_expiry: bigint | null
   }
 
   export type CustomerMinAggregateOutputType = {
@@ -3146,7 +3146,7 @@ export namespace Prisma {
     password: string | null
     salt: string | null
     otp: number | null
-    otp_expiry: number | null
+    otp_expiry: bigint | null
     phone: string | null
     isVerified: boolean | null
   }
@@ -3158,7 +3158,7 @@ export namespace Prisma {
     password: string | null
     salt: string | null
     otp: number | null
-    otp_expiry: number | null
+    otp_expiry: bigint | null
     phone: string | null
     isVerified: boolean | null
   }
@@ -3320,7 +3320,7 @@ export namespace Prisma {
     password: string
     salt: string
     otp: number
-    otp_expiry: number
+    otp_expiry: bigint
     phone: string
     isVerified: boolean
     _count: CustomerCountAggregateOutputType | null
@@ -6250,7 +6250,7 @@ export namespace Prisma {
     password?: StringFilter | string
     salt?: StringFilter | string
     otp?: IntFilter | number
-    otp_expiry?: IntFilter | number
+    otp_expiry?: BigIntFilter | bigint | number
     phone?: StringFilter | string
     isVerified?: BoolFilter | boolean
   }
@@ -6298,7 +6298,7 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter | string
     salt?: StringWithAggregatesFilter | string
     otp?: IntWithAggregatesFilter | number
-    otp_expiry?: IntWithAggregatesFilter | number
+    otp_expiry?: BigIntWithAggregatesFilter | bigint | number
     phone?: StringWithAggregatesFilter | string
     isVerified?: BoolWithAggregatesFilter | boolean
   }
@@ -6589,7 +6589,7 @@ export namespace Prisma {
     password: string
     salt: string
     otp: number
-    otp_expiry: number
+    otp_expiry: bigint | number
     phone: string
     isVerified?: boolean
   }
@@ -6601,7 +6601,7 @@ export namespace Prisma {
     password: string
     salt: string
     otp: number
-    otp_expiry: number
+    otp_expiry: bigint | number
     phone: string
     isVerified?: boolean
   }
@@ -6612,7 +6612,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     salt?: StringFieldUpdateOperationsInput | string
     otp?: IntFieldUpdateOperationsInput | number
-    otp_expiry?: IntFieldUpdateOperationsInput | number
+    otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
     phone?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -6624,7 +6624,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     salt?: StringFieldUpdateOperationsInput | string
     otp?: IntFieldUpdateOperationsInput | number
-    otp_expiry?: IntFieldUpdateOperationsInput | number
+    otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
     phone?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -6636,7 +6636,7 @@ export namespace Prisma {
     password: string
     salt: string
     otp: number
-    otp_expiry: number
+    otp_expiry: bigint | number
     phone: string
     isVerified?: boolean
   }
@@ -6647,7 +6647,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     salt?: StringFieldUpdateOperationsInput | string
     otp?: IntFieldUpdateOperationsInput | number
-    otp_expiry?: IntFieldUpdateOperationsInput | number
+    otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
     phone?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -6659,7 +6659,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     salt?: StringFieldUpdateOperationsInput | string
     otp?: IntFieldUpdateOperationsInput | number
-    otp_expiry?: IntFieldUpdateOperationsInput | number
+    otp_expiry?: BigIntFieldUpdateOperationsInput | bigint | number
     phone?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -7085,6 +7085,17 @@ export namespace Prisma {
     _max?: NestedEnumFoodTypeFilter
   }
 
+  export type BigIntFilter = {
+    equals?: bigint | number
+    in?: Enumerable<bigint> | Enumerable<number>
+    notIn?: Enumerable<bigint> | Enumerable<number>
+    lt?: bigint | number
+    lte?: bigint | number
+    gt?: bigint | number
+    gte?: bigint | number
+    not?: NestedBigIntFilter | bigint | number
+  }
+
   export type BoolFilter = {
     equals?: boolean
     not?: NestedBoolFilter | boolean
@@ -7136,6 +7147,22 @@ export namespace Prisma {
     id?: SortOrder
     otp?: SortOrder
     otp_expiry?: SortOrder
+  }
+
+  export type BigIntWithAggregatesFilter = {
+    equals?: bigint | number
+    in?: Enumerable<bigint> | Enumerable<number>
+    notIn?: Enumerable<bigint> | Enumerable<number>
+    lt?: bigint | number
+    lte?: bigint | number
+    gt?: bigint | number
+    gte?: bigint | number
+    not?: NestedBigIntWithAggregatesFilter | bigint | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedBigIntFilter
+    _min?: NestedBigIntFilter
+    _max?: NestedBigIntFilter
   }
 
   export type BoolWithAggregatesFilter = {
@@ -7428,6 +7455,14 @@ export namespace Prisma {
     deleteMany?: Enumerable<MealImageScalarWhereInput>
   }
 
+  export type BigIntFieldUpdateOperationsInput = {
+    set?: bigint | number
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -7678,9 +7713,36 @@ export namespace Prisma {
     _max?: NestedEnumFoodTypeFilter
   }
 
+  export type NestedBigIntFilter = {
+    equals?: bigint | number
+    in?: Enumerable<bigint> | Enumerable<number>
+    notIn?: Enumerable<bigint> | Enumerable<number>
+    lt?: bigint | number
+    lte?: bigint | number
+    gt?: bigint | number
+    gte?: bigint | number
+    not?: NestedBigIntFilter | bigint | number
+  }
+
   export type NestedBoolFilter = {
     equals?: boolean
     not?: NestedBoolFilter | boolean
+  }
+
+  export type NestedBigIntWithAggregatesFilter = {
+    equals?: bigint | number
+    in?: Enumerable<bigint> | Enumerable<number>
+    notIn?: Enumerable<bigint> | Enumerable<number>
+    lt?: bigint | number
+    lte?: bigint | number
+    gt?: bigint | number
+    gte?: bigint | number
+    not?: NestedBigIntWithAggregatesFilter | bigint | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedBigIntFilter
+    _min?: NestedBigIntFilter
+    _max?: NestedBigIntFilter
   }
 
   export type NestedBoolWithAggregatesFilter = {

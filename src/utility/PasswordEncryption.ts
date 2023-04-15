@@ -12,7 +12,7 @@ dotenv.config();
 // TODO => hide it later in a secret key manager
 const APP_SECRET = "my_app_secret";
 
-export const generateSlat = async () =>
+export const generateSalt = async () =>
 {
    let salt = await bcrypt.genSalt();
    return salt;
