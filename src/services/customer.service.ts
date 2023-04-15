@@ -1,5 +1,5 @@
 import { exit } from "process";
-import { customerSignupDto, customerSignaturePayloadDto, customerLoginDto, getCustomerDto } from "../dtos";
+import { customerSignupDto, customerSignaturePayloadDto, customerLoginDto, getCustomerDto, updateCustomerProfileDto } from "../dtos";
 import { Log } from "../utility/ConsoleLogger";
 import { db } from "./prisma.service";
 import { generateOTP } from "../utility/GenerateOTP";
@@ -158,4 +158,32 @@ export const RequestNewOtpService = async (customer: AuthorizationPayloadDto) =>
    };
    return await GenerateSignature(customerPaylaod);
 
+};
+
+export const GetCustomerProfile = async (customer: AuthorizationPayloadDto) =>
+{
+   //* check if this customer really in db or not 
+   let existingCustomer = await db.customer.findUnique({ where: { email: customer.email } });
+   if (!existingCustomer) return null;
+
+   return existingCustomer;
+};
+
+export const UpdateCustomerProfile = async (customer: AuthorizationPayloadDto, updatedCustomerProfile: updateCustomerProfileDto) =>
+{
+   //* check if this customer in db or not
+   let existingCustomer = await db.customer.findUnique({ where: { email: customer.email } });
+   if (!existingCustomer) return null;
+
+   //* update the customer info 
+   const updatedCustomer = await db.customer.update({
+      where: { id: customer.id },
+      data: {
+         username: updatedCustomerProfile.username ?? existingCustomer.username,
+         phone: updatedCustomerProfile.phone ?? existingCustomer.phone
+      }
+   });
+
+   //* return to the controller the updated customer 
+   return updatedCustomer;
 };

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { LoginCustomer, RequestNewOtpService, signupCustomer, VerifyCustomerAccount } from "../services";
-import { customerLoginDto, customerSignupDto, getCustomerDto } from "../dtos";
+import { GetCustomerProfile, LoginCustomer, RequestNewOtpService, signupCustomer, UpdateCustomerProfile, VerifyCustomerAccount } from "../services";
+import { customerLoginDto, customerSignupDto, getCustomerDto, updateCustomerProfileDto } from "../dtos";
 import { AuthorizationPayloadDto } from "../dtos/auth/authorizationPayloadDto";
 import { Log } from "../utility/ConsoleLogger";
 
@@ -27,9 +27,60 @@ export const LoginCustomerController = async (req: Request, res: Response, neext
    else return res.status(200).json({ "data": response });
 };
 
-export const GetCustomerProfileController = async (req: Request, res: Response, neext: NextFunction) => { };
+export const GetCustomerProfileController = async (req: Request, res: Response, neext: NextFunction) =>
+{
+   //* extract the authorized customer from the req
+   const customerPayload = req.user;
+   if (!customerPayload) return res.status(403).json({ "error": "Not Authorized " });
 
-export const UpdateCustomerProfileController = async (req: Request, res: Response, neext: NextFunction) => { };
+   //* call the service layer's business logic
+   let response = await GetCustomerProfile(customerPayload);
+
+   if (!response) return res.status(500).json({ "error": "Server error !!" });
+
+   //* convert the response to the getDto 
+   let customerDto: getCustomerDto = {
+      id: response?.id,
+      email: response?.email,
+      phone: response?.phone,
+      isVerified: response?.isVerified,
+      username: response?.username
+   };
+
+   //* return the response
+   return res.status(200).json({ "data": customerDto });
+
+};
+
+export const UpdateCustomerProfileController = async (req: Request, res: Response, neext: NextFunction) =>
+{
+   //* extract the authorized customer from the req
+   const customerPayload = req.user;
+   if (!customerPayload) return res.status(403).json({ "error": "Not Authorized " });
+
+   //* extract the updated customer data from the request body 
+   const updatedInfo: updateCustomerProfileDto = <updateCustomerProfileDto>req.body;
+
+   Log("heree");
+
+   //* call the service layer's business logic 
+   let response = await UpdateCustomerProfile(customerPayload, updatedInfo);
+
+   if (!response) return res.status(500).json({ "error": "Server error !!" });
+
+   //* convert the response to the getDto 
+   let customerDto: getCustomerDto = {
+      id: response?.id,
+      email: response?.email,
+      phone: response?.phone,
+      isVerified: response?.isVerified,
+      username: response?.username
+   };
+
+   //* return the response
+   return res.status(200).json({ "data": customerDto });
+
+};
 
 export const VerifyCustomerAccountController = async (req: Request, res: Response, neext: NextFunction) =>
 {

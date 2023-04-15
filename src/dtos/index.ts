@@ -7,3 +7,4 @@ export * from "./customer/customerSignaturePayloadDto";
 export * from "./customer/customerSignupDto";
 export * from "./customer/getCustomerDto";
 export * from "./customer/customerLoginDto";
+export * from "./customer/updateCustomerProfileDto";
