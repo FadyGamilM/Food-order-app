@@ -18,6 +18,7 @@ export const generateSlat = async () =>
    return salt;
 };
 
+//! Encrypt given password using given salt
 export const EncryptPassword = async (password: string, salt: string): Promise<string> =>
 {
    let encryptedPass: string = await bcrypt.hash(password, salt);
@@ -28,7 +29,7 @@ export const EncryptPassword = async (password: string, salt: string): Promise<s
 export const ValidateLoginPassword = async (loginPass: string, savedPass: string, savedSalt: string): Promise<boolean> =>
 {
    // hash the given pass while login
-   let hashedPass: string = await EncryptPassword(loginPass, savedPass);
+   let hashedPass: string = await EncryptPassword(loginPass, savedSalt);
 
    // compare if they the same and return the response
    let comparisonResult: boolean = hashedPass === savedPass ? true : false;
@@ -39,7 +40,7 @@ export const ValidateLoginPassword = async (loginPass: string, savedPass: string
 
 
 //! to create the signature (hashed user info) for later authorization 
-export const GenerateSignature = async (payload: vendorSignaturePayloadDto) =>
+export const GenerateSignature = async (payload: AuthorizationPayloadDto) =>
 {
    return jwt.sign(payload, APP_SECRET, { expiresIn: "5d" });
 };
@@ -57,7 +58,6 @@ export const ValidateSignature = async (req: Request): Promise<boolean> =>
 
       //* now assign the user to the request to be accessed in the next requests handlers
       req.user = authorizedUserPayload;
-
 
       //* and return the response to the handler
       return true;
