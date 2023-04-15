@@ -123,7 +123,7 @@ export const AddNewMeal = async (vendorId: number, meal: createMealDto) =>
          category: meal.category as keyof typeof FoodCategory,
          mealName: meal.mealName,
          type: meal.type as keyof typeof FoodType,
-         timeToBeReady: add(new Date(), { "hours": 2 }),
+         timeToBeReady: meal.timeToBeReady,
          rating: 0.0
       }
    });
@@ -132,9 +132,6 @@ export const AddNewMeal = async (vendorId: number, meal: createMealDto) =>
    //* return the created meal
    return createdMeal;
 };
-
-
-
 
 
 

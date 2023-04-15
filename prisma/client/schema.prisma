@@ -26,6 +26,7 @@ model Vendor {
   isServiceAvailable Boolean?   @default(true)
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
+  rating             Int        @default(0)
 
   //* each vendor has one or more cover images
   coverImages VendorImage[]
@@ -38,7 +39,7 @@ model Meal {
   id            Int          @id @default(autoincrement())
   mealName      String
   rating        Int?
-  timeToBeReady DateTime     @default(now())
+  timeToBeReady Int
   category      FoodCategory
   type          FoodType
 

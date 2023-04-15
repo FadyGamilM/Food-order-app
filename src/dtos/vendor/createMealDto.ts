@@ -1,7 +1,7 @@
 export interface createMealDto
 {
    mealName: string,
-   timeToBeReady: Date;
+   timeToBeReady: number;
    category: string;
    type: string;
    images?: [];

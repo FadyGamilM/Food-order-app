@@ -142,7 +142,8 @@ exports.Prisma.VendorScalarFieldEnum = makeEnum({
   address: 'address',
   isServiceAvailable: 'isServiceAvailable',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  rating: 'rating'
 });
 exports.FoodCategory = makeEnum({
   BREAKFAST: 'BREAKFAST',
