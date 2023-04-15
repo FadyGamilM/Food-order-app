@@ -89,6 +89,18 @@ Prisma.NullTypes = {
 // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 function makeEnum(x) { return x; }
 
+exports.Prisma.CustomerScalarFieldEnum = makeEnum({
+  id: 'id',
+  username: 'username',
+  email: 'email',
+  password: 'password',
+  salt: 'salt',
+  otp: 'otp',
+  otp_expiry: 'otp_expiry',
+  phone: 'phone',
+  isVerified: 'isVerified'
+});
+
 exports.Prisma.MealImageScalarFieldEnum = makeEnum({
   id: 'id',
   price: 'price',
@@ -159,6 +171,7 @@ exports.FoodType = makeEnum({
 exports.Prisma.ModelName = makeEnum({
   Vendor: 'Vendor',
   Meal: 'Meal',
+  Customer: 'Customer',
   VendorImage: 'VendorImage',
   MealImage: 'MealImage'
 });

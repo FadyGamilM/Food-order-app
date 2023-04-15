@@ -50,6 +50,18 @@ model Meal {
   vendorId Int
 }
 
+model Customer {
+  id         Int     @id @default(autoincrement())
+  username   String
+  email      String
+  password   String
+  salt       String
+  otp        Int
+  otp_expiry Int // i will store the milleseconds here and conert it to Date using new Date().setTime(otp_expiry) method in my service logic
+  phone      String
+  isVerified Boolean @default(false)
+}
+
 model VendorImage {
   id        Int      @id @default(autoincrement())
   // vendor can has many cover images
