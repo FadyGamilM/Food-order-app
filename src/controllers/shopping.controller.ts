@@ -21,7 +21,7 @@ export const GetTopRatingVendorsController = async (req: Request, res: Response,
    let topRatingVendors = await GetTopRatingVendors(5);
 
    //* return the response
-   return res.status(200).json(topRatingVendors);
+   return res.status(200).json({ "data": topRatingVendors });
 };
 
 
@@ -31,8 +31,11 @@ export const GetVendorMealsUnderSpecificTimeController = async (req: Request, re
    //* extract data from the body of the request 
    let duration: number = parseInt(req.body.duration);
 
+   //* extract the vendor pinCode "location"
+   let pinCode: string = req.params.pinCode;
+
    //* call the service layer 
-   let mealsUnderDuration = await GetVendorMealsUnderSpecificTime(duration);
+   let mealsUnderDuration = await GetVendorMealsUnderSpecificTime(duration, pinCode);
 
    //* return the response 
    return res.status(200).json({ "data": mealsUnderDuration });

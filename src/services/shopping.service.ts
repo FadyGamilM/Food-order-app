@@ -34,25 +34,26 @@ export const GetTopRatingVendors = async (numOfVendors: number = 10) =>
    return vendors;
 };
 
-export const GetVendorMealsUnderSpecificTime = async (duration: number) =>
+export const GetVendorMealsUnderSpecificTime = async (duration: number, location: string) =>
 {
-   //* get all vendors and populate the meals with each vendor
-   let vendors = await db.vendor.findMany({
+   //* get this vendor and populate its meals 
+   let vendor = await db.vendor.findFirst({
       where: {
-         isServiceAvailable: true // for sure users look for meals in less than 30 mins, so we have to return only the available service only 
+         AND: {
+            pinCode: location,
+            isServiceAvailable: true // for sure users look for meals in less than 30 mins, so we have to return only the available service only 
+         }
       },
       include: {
          _count: true,
          meals: true
       }
    });
+   if (vendor === null) return null;
 
    //* filter the meals based on the duration for being ready
    let meals: Array<Meal> = [];
-   vendors.forEach(vendor =>
-   {
-      meals.push(...vendor.meals.filter(meal => meal.timeToBeReady <= duration));
-   });
+   meals.push(...vendor.meals.filter(meal => meal.timeToBeReady <= duration));
 
    //* return the response
    return meals;
